@@ -68,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resolvers\ActorPathResolver.cs" />
+    <Compile Include="Resolvers\ActorRefResolver.cs" />
+    <Compile Include="Resolvers\PropsResolver.cs" />
     <Compile Include="MsgPackSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
