@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using Akka.Actor;
+using Akka.Actor.Internal;
 using MessagePack;
 using MessagePack.Formatters;
 
 namespace Akka.Serialization.MessagePack.Resolvers
 {
-    public class ActorPathResolver : IFormatterResolver
+    public class ActorRefResolver : IFormatterResolver
     {
         // Resolver should be singleton.
-        public static IFormatterResolver Instance = new ActorPathResolver();
+        public static IFormatterResolver Instance = new ActorRefResolver();
 
-        ActorPathResolver()
+        ActorRefResolver()
         {
         }
 
@@ -29,19 +32,19 @@ namespace Akka.Serialization.MessagePack.Resolvers
             // use outer helper method.
             static FormatterCache()
             {
-                Formatter = (IMessagePackFormatter<T>)ActorPathResolverGetFormatterHelper.GetFormatter(typeof(T));
+                Formatter = (IMessagePackFormatter<T>)ActorRefResolverGetFormatterHelper.GetFormatter(typeof(T));
             }
         }
     }
 
-    internal static class ActorPathResolverGetFormatterHelper
+    internal static class ActorRefResolverGetFormatterHelper
     {
         // If type is concrete type, use type-formatter map
         static readonly Dictionary<Type, object> FormatterMap = new Dictionary<Type, object>()
         {
-            {typeof(ActorPath), new ActorPathFormatter<ActorPath>()},
-            {typeof(ChildActorPath), new ActorPathFormatter<ChildActorPath>()},
-            {typeof(RootActorPath), new ActorPathFormatter<RootActorPath>()}
+            {typeof(IActorRef), new ActorRefFormatter<IActorRef>()},
+            {typeof(IInternalActorRef), new ActorRefFormatter<IInternalActorRef>()},
+            {typeof(RepointableActorRef), new ActorRefFormatter<RepointableActorRef>()}
         };
 
         internal static object GetFormatter(Type t)
@@ -57,7 +60,7 @@ namespace Akka.Serialization.MessagePack.Resolvers
         }
     }
 
-    public class ActorPathFormatter<T> : IMessagePackFormatter<T> where T : ActorPath
+    public class ActorRefFormatter<T> : IMessagePackFormatter<T> where T : IActorRef
     {
         public int Serialize(ref byte[] bytes, int offset, T value, IFormatterResolver formatterResolver)
         {
@@ -67,7 +70,7 @@ namespace Akka.Serialization.MessagePack.Resolvers
             }
 
             var startOffset = offset;
-            offset += MessagePackBinary.WriteString(ref bytes, offset, value.ToSerializationFormat());
+            offset += MessagePackBinary.WriteString(ref bytes, offset, Serialization.SerializedActorPath(value));
             return offset - startOffset;
         }
 
@@ -76,18 +79,16 @@ namespace Akka.Serialization.MessagePack.Resolvers
             if (MessagePackBinary.IsNil(bytes, offset))
             {
                 readSize = 1;
-                return null;
+                return default(T);
             }
 
             var path = MessagePackBinary.ReadString(bytes, offset, out readSize);
 
-            ActorPath actorPath;
-            if (ActorPath.TryParse(path, out actorPath))
-            {
-                return (T)actorPath;
-            }
+            var system = (ActorSystemImpl)CallContext.GetData("ActorSystem");
+            if (system == null)
+                return default(T);
 
-            return null;
+            return (T)system.Provider.ResolveActorRef(path);
         }
     }
 }

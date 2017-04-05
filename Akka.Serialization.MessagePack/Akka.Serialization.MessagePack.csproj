@@ -35,11 +35,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MessagePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MessagePack.1.0.2\lib\net45\MessagePack.dll</HintPath>
+      <HintPath>..\packages\MessagePack.1.1.2\lib\net45\MessagePack.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MessagePack.ImmutableCollection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MessagePack.ImmutableCollection.1.0.2\lib\net45\MessagePack.ImmutableCollection.dll</HintPath>
+      <HintPath>..\packages\MessagePack.ImmutableCollection.1.1.2\lib\net45\MessagePack.ImmutableCollection.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -52,6 +52,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -68,11 +73,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Resolvers\ActorPathResolver.cs" />
     <Compile Include="Resolvers\ActorRefResolver.cs" />
-    <Compile Include="Resolvers\PropsResolver.cs" />
+    <Compile Include="Resolvers\ActorPathResolver.cs" />
     <Compile Include="MsgPackSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolvers\KillResolver.cs" />
+    <Compile Include="Resolvers\PoisonPillResolver.cs" />
+    <Compile Include="Resolvers\ConfigResolver.cs" />
+    <Compile Include="Resolvers\PrimitiveObjectFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

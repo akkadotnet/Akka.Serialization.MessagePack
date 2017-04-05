@@ -5,14 +5,20 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Akka.Serialization.MsgPack;
-using Akka.Tests.Serialization;
+using Akka.Serialization.MessagePack.Tests.TestKit;
 
 namespace Akka.Serialization.MessagePack.Tests
 {
     public class MessagePackTests : AkkaSerializationSpec
     {
         public MessagePackTests() : base(typeof(MsgPackSerializer))
+        {
+        }
+    }
+
+    public class MessagePackBaseTests : BaseMessagesSerializationSpec
+    {
+        public MessagePackBaseTests() : base(typeof(MsgPackSerializer))
         {
         }
     }

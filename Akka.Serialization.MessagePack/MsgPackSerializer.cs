@@ -1,30 +1,30 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using Akka.Actor;
 using Akka.Serialization.MessagePack.Resolvers;
-using Akka.Util;
 using MessagePack;
-using MessagePack.ImmutableCollection;
 using MessagePack.Resolvers;
 
-namespace Akka.Serialization.MsgPack
+namespace Akka.Serialization.MessagePack
 {
     public class MsgPackSerializer : Serializer
     {
         static MsgPackSerializer()
         {
             CompositeResolver.RegisterAndSetAsDefault(
-                // resolver custom types first
                 ActorPathResolver.Instance,
                 ActorRefResolver.Instance,
-                ImmutableCollectionResolver.Instance,
-
-                // finaly use standard resolver
+                ConfigResolver.Instance,
+                PoisonPillResolver.Instance,
+                KillResolver.Instance,
+                PrimitiveObjectResolver.Instance,
                 ContractlessStandardResolver.Instance);
         }
 
         public MsgPackSerializer(ExtendedActorSystem system) : base(system)
         {
-
+            // TODO: hack to pass a context to formatters
+            CallContext.SetData("ActorSystem", system);
         }
 
         public override byte[] ToBinary(object obj)
