@@ -168,7 +168,7 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(remoteScope);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_Config()
         {
             var message = ConfigurationFactory.Default();
@@ -178,7 +178,7 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             config1.Should().Be(config2);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_OneForOneStrategy()
         {
             var decider = Decider.From(
@@ -190,7 +190,7 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_AllForOneStrategy()
         {
             var decider = Decider.From(
@@ -202,7 +202,7 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_RoundRobinPool()
         {
             var decider = Decider.From(
@@ -216,14 +216,14 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_RoundRobinGroup()
         {
             var message = new RoundRobinGroup("abc", Dispatchers.DefaultDispatcherId);
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_RandomPool()
         {
             var decider = Decider.From(
@@ -237,14 +237,14 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_RandomGroup()
         {
             var message = new RandomGroup("abc", Dispatchers.DefaultDispatcherId);
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_ConsistentHashPool()
         {
             var decider = Decider.From(
@@ -258,14 +258,14 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_ConsistentHashingGroup()
         {
             var message = new ConsistentHashingGroup("abc", Dispatchers.DefaultDispatcherId);
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_TailChoppingPool()
         {
             var decider = Decider.From(
@@ -278,14 +278,14 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_TailChoppingGroup()
         {
             var message = new TailChoppingGroup(new List<string> { "abc" }, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), Dispatchers.DefaultDispatcherId);
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_ScatterGatherFirstCompletedPool()
         {
             var decider = Decider.From(
@@ -298,14 +298,14 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_ScatterGatherFirstCompletedGroup()
         {
             var message = new ScatterGatherFirstCompletedGroup(new List<string> { "abc" }, TimeSpan.FromSeconds(1), Dispatchers.DefaultDispatcherId);
             AssertEqual(message);
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_SmallestMailboxPool()
         {
             var decider = Decider.From(
@@ -326,7 +326,7 @@ namespace Akka.Serialization.MessagePack.Tests.TestKit
             AssertAndReturn(kill).Should().BeOfType<Kill>();
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public void Can_serialize_ActorSelectionMessage()
         {
             var identify = new Identify("message");

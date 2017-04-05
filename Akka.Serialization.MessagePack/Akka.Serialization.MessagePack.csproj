@@ -35,7 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MessagePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MessagePack.1.1.2\lib\net45\MessagePack.dll</HintPath>
+      <HintPath>..\packages\MessagePack.1.2.0\lib\net45\MessagePack.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MessagePack.ImmutableCollection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -80,7 +80,6 @@
     <Compile Include="Resolvers\KillResolver.cs" />
     <Compile Include="Resolvers\PoisonPillResolver.cs" />
     <Compile Include="Resolvers\ConfigResolver.cs" />
-    <Compile Include="Resolvers\PrimitiveObjectFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
