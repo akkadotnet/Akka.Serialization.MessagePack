@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿#if SERIALIZABLE
+
+using FluentAssertions;
 using System;
 using System.Runtime.Serialization;
 using Xunit;
@@ -147,3 +149,4 @@ namespace Akka.Serialization.Testkit
         }
     }
 }
+#endif

@@ -26,12 +26,14 @@ namespace Akka.Serialization.MsgPack.Tests
         }
     }
 
+#if SERIALIZABLE
     public class MsgPackExceptionsTests : ExceptionsTests
     {
         public MsgPackExceptionsTests() : base(typeof(MsgPackSerializer))
         {
         }
     }
+#endif
 
     public class MsgPackImmutableMessagesTests : ImmutableMessagesTests
     {
@@ -43,6 +45,21 @@ namespace Akka.Serialization.MsgPack.Tests
     public class MsgPackPolymorphismTests : PolymorphismTests
     {
         public MsgPackPolymorphismTests() : base(typeof(MsgPackSerializer))
+        {
+        }
+
+        [Fact]
+        public override void Can_Serialize_a_class_with_internal_constructor()
+        {
+        }
+
+        [Fact]
+        public override void Can_Serialize_a_class_with_private_constructor()
+        {
+        }
+
+        [Fact]
+        public override void Can_Serialize_internal_class()
         {
         }
     }
