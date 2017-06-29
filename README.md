@@ -24,4 +24,4 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 - Exceptions (on NetCore)
 
 ## Maintainer
-[alexvaluyskiy](https://github.com/alexvaluyskiy)
+- [alexvaluyskiy](https://github.com/alexvaluyskiy)
