@@ -35,28 +35,28 @@ namespace Akka.Serialization.Testkit
         [Fact]
         public void Can_Serialize_int()
         {
-            var actual = 435;
+            int actual = 435;
             AssertEqual(actual);
         }
 
         [Fact]
         public void Can_Serialize_long()
         {
-            var actual = 435L;
+            long actual = 435L;
             AssertEqual(actual);
         }
 
         [Fact]
         public void Can_Serialize_double()
         {
-            var actual = 56.56;
+            double actual = 56.56d;
             AssertEqual(actual);
         }
 
         [Fact]
         public void Can_Serialize_float()
         {
-            var actual = 56.56f;
+            float actual = 56.56f;
             AssertEqual(actual);
         }
 
@@ -145,9 +145,16 @@ namespace Akka.Serialization.Testkit
         }
 
         [Fact]
-        public virtual void Can_Serialize_Uri()
+        public virtual void Can_Serialize_AbsoluteUri()
         {
-            var actual = new Uri("http://getakka.net");
+            var actual = new Uri("http://getakka.net/articles/index.html");
+            AssertEqual(actual);
+        }
+
+        [Fact]
+        public virtual void Can_Serialize_RelativeUri()
+        {
+            var actual = new Uri("/articles/index.html", UriKind.Relative);
             AssertEqual(actual);
         }
 

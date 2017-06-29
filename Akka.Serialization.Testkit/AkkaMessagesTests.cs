@@ -19,6 +19,14 @@ namespace Akka.Serialization.Testkit
         }
 
         [Fact]
+        public void Can_serialize_RootActorPath()
+        {
+            var uri = "akka.tcp://sys@localhost:9000";
+            var actorPath = ActorPath.Parse(uri);
+            AssertEqual(actorPath);
+        }
+
+        [Fact]
         public void Can_serialize_ActorPath()
         {
             var uri = "akka.tcp://sys@localhost:9000/user/actor";
