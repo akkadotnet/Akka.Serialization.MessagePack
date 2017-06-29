@@ -22,3 +22,6 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 - Handling circular references
 - Preserve object references
 - Exceptions (on NetCore)
+
+## Maintainer
+[alexvaluyskiy](https://github.com/alexvaluyskiy)
