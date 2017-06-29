@@ -4,16 +4,21 @@ Akka.Serialization.MessagePack
 
 Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-CSharp)
 
-## Supported types
+## It supports
 - Primitive types (`int`, `string`, `long`, etc)
 - Build-in types (`DateTime`, `DateTimeOffset`, `TimeSpan`, `Guid`, `Uri`, `Enum`, etc)
 - Collections (`List<T>`, `HashSet<T>`, `Dictionary<TKey, TValue>`, etc)
 - Immutable Collections
 - Exceptions (only on full .NET Framework)
 - Akka.NET specific types (`ActorPath` and `ActorRef`)
-- object types (polymorphic serialization)
+- Object types (polymorphic serialization)
+- Generic types
+- Version tolerance (???)
 
-## Not supported types
-- internal and private classes
-- classes with private or internal constructors
+## It does not support
+- Internal and private classes
+- Classes with private or internal constructors
 - F# types (`Set`, `Map`, `List`, `FSharpAsync<T>`, discriminated unions)
+- Handling circular references
+- Preserve object references
+- Exceptions (on NetCore)
