@@ -11,3 +11,11 @@ build_script:
 test_script:
 - ps: ./build.ps1 RunTests
 - ps: ./build.ps1 CreateNuget
+deploy:
+  provider: NuGet
+  server: https://www.myget.org/F/akkadotnet-contrib/api/v2/package
+  api_key:
+    secure: yoMgcchmDuXbvT90bgrUTOUNYgAId6QI0nofIOtnlfWzMjDEWfOqNqqTGPY+02M+
+  skip_symbols: false
+  symbol_server: https://www.myget.org/F/akkadotnet-contrib/symbols/api/v2/package
+  artifact: /.*\.nupkg/
