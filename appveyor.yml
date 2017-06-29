@@ -4,7 +4,7 @@ configuration: Release
 platform: Any CPU
 test: off
 artifacts:
-- path: build/nuget
+- path: build/nuget/*.nupkg
   name: nuget
 build_script:
 - ps: ./build.ps1 Build
