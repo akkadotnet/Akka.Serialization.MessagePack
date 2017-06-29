@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akka.Serialization.MessagePack", "Akka.Serialization.MessagePack\Akka.Serialization.MessagePack.csproj", "{0EA6EE13-61B2-4CBD-9241-C19ECA04C015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Serialization.MessagePack", "Akka.Serialization.MessagePack\Akka.Serialization.MessagePack.csproj", "{0EA6EE13-61B2-4CBD-9241-C19ECA04C015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akka.Serialization.MessagePack.Tests", "Akka.Serialization.MessagePack.Tests\Akka.Serialization.MessagePack.Tests.csproj", "{CFDA0472-80EE-42E9-8629-B443C172360E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Serialization.MessagePack.Tests", "Akka.Serialization.MessagePack.Tests\Akka.Serialization.MessagePack.Tests.csproj", "{CFDA0472-80EE-42E9-8629-B443C172360E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Akka.Serialization.Testkit", "Akka.Serialization.Testkit\Akka.Serialization.Testkit.csproj", "{F1DBA496-B62F-436B-879A-481595B74102}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CFDA0472-80EE-42E9-8629-B443C172360E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFDA0472-80EE-42E9-8629-B443C172360E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFDA0472-80EE-42E9-8629-B443C172360E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DBA496-B62F-436B-879A-481595B74102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DBA496-B62F-436B-879A-481595B74102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DBA496-B62F-436B-879A-481595B74102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DBA496-B62F-436B-879A-481595B74102}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
