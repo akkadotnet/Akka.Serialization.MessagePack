@@ -11,7 +11,9 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 - Immutable Collections
 - Exceptions (only on full .NET Framework)
 - Akka.NET specific types (`ActorPath` and `ActorRef`)
+- object types (polymorphic serialization)
 
 ## Not supported types
 - internal and private classes
 - classes with private or internal constructors
+- F# types (`Set`, `Map`, `List`, `FSharpAsync<T>`, discriminated unions)
