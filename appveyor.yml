@@ -1,0 +1,13 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+test: off
+artifacts:
+- path: build/nuget
+  name: nuget
+build_script:
+- ps: ./build.ps1 Build
+test_script:
+- ps: ./build.ps1 RunTests
+- ps: ./build.ps1 CreateNuget
