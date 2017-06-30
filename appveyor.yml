@@ -10,11 +10,16 @@
   - ps: ./build.ps1 Build
   test_script:
   - ps: ./build.ps1 RunTests
-  deploy_script:
   - ps: ./build.ps1 CreateNuget
   artifacts:
   - path: build/nuget/*.nupkg
     name: nuget
+  deploy:
+    provider: NuGet
+    api_key:
+      secure: HasnovdVw/qO3yQPSPdHZwC2GOg5KJVvT8eAwAxuW2wUTgr5lgOdZJNc46RTZ4ng
+    skip_symbols: false
+    artifact: /.*\.nupkg/
 
 # configuration for all branches starting from "dev"
 - 
