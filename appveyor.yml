@@ -28,7 +28,6 @@
   - ps: ./build.ps1 Build
   test_script:
   - ps: ./build.ps1 RunTests
-  deploy_script:
   - ps: ./build.ps1 CreateNuget
   artifacts:
   - path: build/nuget/*.nupkg
