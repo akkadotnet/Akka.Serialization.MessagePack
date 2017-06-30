@@ -1,12 +1,10 @@
-version: 1.0.{build}
-image: Visual Studio 2017
-platform: Any CPU
-
 # configuration for "master" branch
--
+- 
   branches:
     only:
       - master
+  image: Visual Studio 2017
+  platform: Any CPU
   configuration: Release
   build_script:
   - ps: ./build.ps1 Build
@@ -19,10 +17,12 @@ platform: Any CPU
     name: nuget
 
 # configuration for all branches starting from "dev"
--
+- 
   branches:
     only:
       - dev
+  image: Visual Studio 2017
+  platform: Any CPU
   configuration: Release
   build_script:
   - ps: ./build.ps1 Build
