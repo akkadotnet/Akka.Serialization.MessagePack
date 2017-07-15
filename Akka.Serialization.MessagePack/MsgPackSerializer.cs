@@ -7,6 +7,7 @@
 using System;
 using System.Threading;
 using Akka.Actor;
+using Akka.Configuration;
 using Akka.Serialization.MessagePack.Resolvers;
 using MessagePack;
 using MessagePack.ImmutableCollection;
@@ -14,9 +15,10 @@ using MessagePack.Resolvers;
 
 namespace Akka.Serialization.MessagePack
 {
-    public class MsgPackSerializer : Serializer
+    public sealed class MsgPackSerializer : Serializer
     {
         internal static AsyncLocal<ActorSystem> LocalSystem = new AsyncLocal<ActorSystem>();
+        private readonly MsgPackSerializerSettings _settings;
 
         static MsgPackSerializer()
         {
@@ -25,23 +27,47 @@ namespace Akka.Serialization.MessagePack
                 Akka.Serialization.MessagePack.Resolvers.SerializableResolver.Instance,
 #endif
                 AkkaResolver.Instance,
-                ImmutableCollectionResolver.Instance,              
+                ImmutableCollectionResolver.Instance,
                 TypelessContractlessStandardResolver.Instance);
         }
 
-        public MsgPackSerializer(ExtendedActorSystem system) : base(system)
+        public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)
+        {
+        }
+
+        public MsgPackSerializer(ExtendedActorSystem system, Config config) 
+            : this(system, MsgPackSerializerSettings.Create(config))
+        {
+        }
+
+        public MsgPackSerializer(ExtendedActorSystem system, MsgPackSerializerSettings settings) : base(system)
         {
             LocalSystem.Value = system;
+            _settings = settings;
         }
 
         public override byte[] ToBinary(object obj)
         {
-            return MessagePackSerializer.NonGeneric.Serialize(obj.GetType(), obj);
+            if (_settings.EnableLz4Compression)
+            {
+                return LZ4MessagePackSerializer.NonGeneric.Serialize(obj.GetType(), obj);
+            }
+            else
+            {
+                return MessagePackSerializer.NonGeneric.Serialize(obj.GetType(), obj);
+            }
         }
 
         public override object FromBinary(byte[] bytes, Type type)
         {
-            return MessagePackSerializer.NonGeneric.Deserialize(type, bytes);
+            if (_settings.EnableLz4Compression)
+            {
+                return LZ4MessagePackSerializer.NonGeneric.Deserialize(type, bytes);
+            }
+            else
+            {
+                return MessagePackSerializer.NonGeneric.Deserialize(type, bytes);
+            }
         }
 
         public override int Identifier => 41;

@@ -15,11 +15,16 @@ namespace Akka.Serialization.Testkit.Util
             return @"
                 akka.actor {
                     serializers {
-                        testserializer = """ + serializerType.AssemblyQualifiedName + @"""
+                        msgpack = """ + serializerType.AssemblyQualifiedName + @"""
                     }
                     serialization-bindings {
-                      ""System.Object"" = testserializer
+                      ""System.Object"" = msgpack
                     }
+	                serialization-settings {
+		                msgpack {
+			                enable-lz4-compression = false
+		                }
+	                }
                 }";
         }
     }
