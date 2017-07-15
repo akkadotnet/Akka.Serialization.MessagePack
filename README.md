@@ -13,7 +13,7 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 - Akka.NET specific types (`ActorPath` and `ActorRef`)
 - Object types (polymorphic serialization)
 - Generic types
-- Version tolerance (???)
+- Version tolerance
 
 ## It does not support
 - Internal and private classes

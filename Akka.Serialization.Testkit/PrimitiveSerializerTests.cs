@@ -1,6 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PrimitiveSerializerTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Numerics;
+using Akka.Serialization.Testkit.Util;
 using Xunit;
 
 namespace Akka.Serialization.Testkit

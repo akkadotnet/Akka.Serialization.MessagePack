@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿//-----------------------------------------------------------------------
+// <copyright file="CollectionsTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Akka.Serialization.Testkit.Util;
 using Xunit;
 
 namespace Akka.Serialization.Testkit

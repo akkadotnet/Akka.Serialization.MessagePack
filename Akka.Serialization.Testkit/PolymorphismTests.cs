@@ -1,5 +1,12 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PolymorphismTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
+using Akka.Serialization.Testkit.Util;
 using Xunit;
 
 namespace Akka.Serialization.Testkit

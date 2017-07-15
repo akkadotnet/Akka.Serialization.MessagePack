@@ -1,7 +1,13 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="MsgPackSerializer.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Threading;
 using Akka.Actor;
-using Akka.Serialization.MsgPack.Resolvers;
+using Akka.Serialization.MessagePack.Resolvers;
 using MessagePack;
 using MessagePack.ImmutableCollection;
 using MessagePack.Resolvers;

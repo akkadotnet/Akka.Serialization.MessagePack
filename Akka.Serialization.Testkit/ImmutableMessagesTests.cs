@@ -1,5 +1,12 @@
-﻿using FluentAssertions;
+﻿//-----------------------------------------------------------------------
+// <copyright file="ImmutableMessagesTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using FluentAssertions;
 using System;
+using Akka.Serialization.Testkit.Util;
 using Xunit;
 
 namespace Akka.Serialization.Testkit

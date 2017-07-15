@@ -1,4 +1,10 @@
-﻿#if SERIALIZABLE
+﻿//-----------------------------------------------------------------------
+// <copyright file="ExceptionsTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+#if SERIALIZABLE
 
 using FluentAssertions;
 using System;

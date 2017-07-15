@@ -1,4 +1,10 @@
-﻿#if SERIALIZABLE
+﻿//-----------------------------------------------------------------------
+// <copyright file="SerializableResolver.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+#if SERIALIZABLE
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
