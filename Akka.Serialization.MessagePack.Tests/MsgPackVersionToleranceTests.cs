@@ -6,7 +6,6 @@
 
 using System;
 using System.Text;
-using Akka.Serialization.Testkit;
 using Akka.Serialization.Testkit.Util;
 using FluentAssertions;
 using MessagePack;
