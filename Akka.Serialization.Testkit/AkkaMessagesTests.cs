@@ -1,5 +1,12 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="AkkaMessagesTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using Akka.Actor;
+using Akka.Serialization.Testkit.Util;
 using Akka.TestKit.TestActors;
 using Xunit;
 

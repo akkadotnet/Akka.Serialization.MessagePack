@@ -1,10 +1,16 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="ExceptionFallbackResolver.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 
-namespace Akka.Serialization.MsgPack.Resolvers
+namespace Akka.Serialization.MessagePack.Resolvers
 {
     public class ExceptionFallbackResolver : IFormatterResolver
     {

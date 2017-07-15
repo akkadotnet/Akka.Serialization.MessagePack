@@ -1,12 +1,17 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="AkkaResolver.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using Akka.Actor;
-using Akka.Serialization.MessagePack;
 using Akka.Util.Internal;
 using MessagePack;
 using MessagePack.Formatters;
 
-namespace Akka.Serialization.MsgPack.Resolvers
+namespace Akka.Serialization.MessagePack.Resolvers
 {
     public class AkkaResolver : IFormatterResolver
     {

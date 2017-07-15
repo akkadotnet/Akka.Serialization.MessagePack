@@ -3,9 +3,9 @@
   <PropertyGroup>
     <AssemblyTitle>Akka.Serialization.MessagePack</AssemblyTitle>
     <Copyright>Copyright © 2017</Copyright>
-    <Authors>Alex Valuiskyi</Authors>
+    <Authors>Akka.NET Contrib</Authors>
     <Description>MessagePack serializer for Akka.NET</Description>
-    <VersionPrefix>0.5.0</VersionPrefix>
+    <VersionPrefix>0.5.1</VersionPrefix>
     <VersionSuffix>beta</VersionSuffix>
     <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
     <PackageTags>akka;actors;actor model;Akka;concurrency;messagepack;serializer;serialization</PackageTags>

@@ -1,9 +1,13 @@
-﻿using System;
-using Akka.Serialization.MessagePack;
+﻿//-----------------------------------------------------------------------
+// <copyright file="MsgPackSerializersTests.cs" company="Akka.NET Project">
+//     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
+// </copyright>
+//-----------------------------------------------------------------------
+
 using Akka.Serialization.Testkit;
 using Xunit;
 
-namespace Akka.Serialization.MsgPack.Tests
+namespace Akka.Serialization.MessagePack.Tests
 {
     public class MsgPackAkkaMessagesTests : AkkaMessagesTests
     {
@@ -47,18 +51,25 @@ namespace Akka.Serialization.MsgPack.Tests
         public MsgPackPolymorphismTests() : base(typeof(MsgPackSerializer))
         {
         }
+    }
 
-        [Fact]
+    public class MsgPackIncapsulationTests : IncapsulationTests
+    {
+        public MsgPackIncapsulationTests() : base(typeof(MsgPackSerializer))
+        {
+        }
+
+        [Fact(Skip = "Not supported yet")]
         public override void Can_Serialize_a_class_with_internal_constructor()
         {
         }
 
-        [Fact]
+        [Fact(Skip = "Not supported yet")]
         public override void Can_Serialize_a_class_with_private_constructor()
         {
         }
 
-        [Fact]
+        [Fact(Skip = "Not supported yet")]
         public override void Can_Serialize_internal_class()
         {
         }
