@@ -9,6 +9,7 @@
 using FluentAssertions;
 using System;
 using System.Runtime.Serialization;
+using Akka.Serialization.Testkit.Util;
 using Xunit;
 
 namespace Akka.Serialization.Testkit
