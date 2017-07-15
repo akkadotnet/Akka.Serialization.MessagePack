@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using Akka.Serialization.Testkit;
+using Xunit;
 
 namespace Akka.Serialization.MessagePack.Tests
 {
@@ -48,6 +49,28 @@ namespace Akka.Serialization.MessagePack.Tests
     public class MsgPackPolymorphismTests : PolymorphismTests
     {
         public MsgPackPolymorphismTests() : base(typeof(MsgPackSerializer))
+        {
+        }
+    }
+
+    public class MsgPackIncapsulationTests : IncapsulationTests
+    {
+        public MsgPackIncapsulationTests() : base(typeof(MsgPackSerializer))
+        {
+        }
+
+        [Fact(Skip = "Not supported yet")]
+        public override void Can_Serialize_a_class_with_internal_constructor()
+        {
+        }
+
+        [Fact(Skip = "Not supported yet")]
+        public override void Can_Serialize_a_class_with_private_constructor()
+        {
+        }
+
+        [Fact(Skip = "Not supported yet")]
+        public override void Can_Serialize_internal_class()
         {
         }
     }
