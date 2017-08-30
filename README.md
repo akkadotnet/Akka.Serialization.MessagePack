@@ -28,7 +28,7 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 
 ## How to setup MessagePack as default serializer
 Bind MessagePack serializer using following HOCON configuration in your actor system settings:
-```json
+```hocon
 akka {
   actor {
     serializers {
