@@ -20,20 +20,28 @@ namespace Akka.Serialization.MessagePack.Tests
         {
         }
 
-        [Fact(Skip = "Not implemented yet")]
-        public void Can_serialize_typeless_message_from_NET_on_NETCORE_and_vise_versa()
+        [Fact]
+        public void Can_deserialize_Uri_message_which_was_serialized_on_full_NET()
         {
-#if NETCOREAPP1_1
+            // TypelessClass with System.URI serialized on .NET
             var serializedString = "gaZOZXN0ZWTJAAAAbWTZVVN5c3RlbS5VcmksIFN5c3RlbSwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODm1aHR0cDovL21pY3Jvc29mdC5jb20v";
-#else
-            var serializedString = "gaZOZXN0ZWTJAAAANWS+U3lzdGVtLlVyaSwgU3lzdGVtLlByaXZhdGUuVXJptWh0dHA6Ly9taWNyb3NvZnQuY29tLw==";
-#endif
-            var simpleString = Encoding.UTF8.GetString(Convert.FromBase64String(serializedString));
 
             var deserialized = MessagePackSerializer.Deserialize<TypelessClass>(
                 Convert.FromBase64String(serializedString),
                 TypelessContractlessStandardResolver.Instance);
             Assert.Equal(new Uri("http://microsoft.com"), deserialized.Nested);
+        }
+
+        [Fact]
+        public void Can_deserialize_TimeSpan_message_which_was_serialized_on_full_NET()
+        {
+            // TypelessClass with System.TimeSpan serialized on .NET
+            var serializedString = "gaZOZXN0ZWTJAAAAH2S5U3lzdGVtLlRpbWVTcGFuLCBtc2NvcmxpYs6y0F4A";
+
+            var deserialized = MessagePackSerializer.Deserialize<TypelessClass>(
+                Convert.FromBase64String(serializedString),
+                TypelessContractlessStandardResolver.Instance);
+            Assert.Equal(TimeSpan.FromMinutes(5), deserialized.Nested);
         }
 
         [Fact]
