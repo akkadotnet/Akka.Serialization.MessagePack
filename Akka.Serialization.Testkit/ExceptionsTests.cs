@@ -4,8 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if SERIALIZABLE
-
 using FluentAssertions;
 using System;
 using System.Runtime.Serialization;
@@ -156,4 +154,3 @@ namespace Akka.Serialization.Testkit
         }
     }
 }
-#endif

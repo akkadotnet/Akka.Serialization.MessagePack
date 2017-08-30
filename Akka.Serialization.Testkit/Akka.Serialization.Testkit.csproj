@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,9 +10,5 @@
     <PackageReference Include="FluentAssertions" Version="4.19.2" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>$(DefineConstants);SERIALIZABLE</DefineConstants>
-  </PropertyGroup>
 
 </Project>
