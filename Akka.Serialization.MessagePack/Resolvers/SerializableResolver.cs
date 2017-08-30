@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if SERIALIZABLE
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -105,4 +104,3 @@ namespace Akka.Serialization.MessagePack.Resolvers
         }
     }
 }
-#endif

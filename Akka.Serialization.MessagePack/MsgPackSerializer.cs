@@ -23,9 +23,7 @@ namespace Akka.Serialization.MessagePack
         static MsgPackSerializer()
         {
             CompositeResolver.RegisterAndSetAsDefault(
-#if SERIALIZABLE
-                Akka.Serialization.MessagePack.Resolvers.SerializableResolver.Instance,
-#endif
+                SerializableResolver.Instance,
                 AkkaResolver.Instance,
                 ImmutableCollectionResolver.Instance,
                 TypelessContractlessStandardResolver.Instance);
@@ -70,7 +68,7 @@ namespace Akka.Serialization.MessagePack
             }
         }
 
-        public override int Identifier => 41;
+        public override int Identifier => 150;
 
         public override bool IncludeManifest => false;
     }

@@ -4,12 +4,16 @@ Akka.Serialization.MessagePack
 
 Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-CSharp)
 
+## Supported platforms
+- .NET Core 2.0 (via .NET Standard 2.0)
+- .NET Framework 4.6 and higher (via .NET Standard 2.0)
+
 ## It supports
 - Primitive types (`int`, `string`, `long`, etc)
 - Build-in types (`DateTime`, `DateTimeOffset`, `TimeSpan`, `Guid`, `Uri`, `Enum`, etc)
 - Collections (`List<T>`, `HashSet<T>`, `Dictionary<TKey, TValue>`, etc)
 - Immutable Collections
-- Exceptions (only on full .NET Framework)
+- Exceptions
 - Akka.NET specific types (`ActorPath` and `ActorRef`)
 - Object types (polymorphic serialization)
 - Generic types
@@ -21,7 +25,21 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 - F# types (`Set`, `Map`, `List`, `FSharpAsync<T>`, discriminated unions)
 - Handling circular references
 - Preserve object references
-- Exceptions (on NetCore)
+
+## How to setup MessagePack as default serializer
+Bind MessagePack serializer using following HOCON configuration in your actor system settings:
+```json
+akka {
+  actor {
+    serializers {
+      messagepack = "Akka.Serialization.MessagePack.MsgPackSerializer, Akka.Serialization.MessagePack"
+    }
+    serialization-bindings {
+      "System.Object" = messagepack
+    }
+  }
+}
+```
 
 ## Maintainer
 - [alexvaluyskiy](https://github.com/alexvaluyskiy)

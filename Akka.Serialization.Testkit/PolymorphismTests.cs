@@ -29,6 +29,17 @@ namespace Akka.Serialization.Testkit
         }
 
         [Fact]
+        public virtual void Can_Serialize_MessageWithObjectPropertyPrimitive_do_not_downcast_to_byte()
+        {
+            var actual = new PolymorphismMessages.ImmutableMessageWithObjectTypes
+            {
+                Name = "John",
+                Data = 125
+            };
+            AssertEqual(actual);
+        }
+
+        [Fact]
         public virtual void Can_Serialize_MessageWithObjectPropertyComplex()
         {
             var data = new CustomMessage.MessageWithPublicSetters
