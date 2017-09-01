@@ -70,6 +70,6 @@ namespace Akka.Serialization.MessagePack
 
         public override int Identifier => 150;
 
-        public override bool IncludeManifest => false;
+        public override bool IncludeManifest => true;
     }
 }
