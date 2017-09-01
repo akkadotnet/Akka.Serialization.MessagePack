@@ -1,6 +1,6 @@
 Akka.Serialization.MessagePack
 ===
-[![Build status](https://ci.appveyor.com/api/projects/status/nl651507h49ab63k/branch/master?svg=true)](https://ci.appveyor.com/project/akkadotnet-contrib/akka-serialization-messagepack/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/xaltap7v4n0m042d/branch/dev?svg=true)](https://ci.appveyor.com/project/akkadotnet-contrib/akka-serialization-messagepack/branch/dev) [![NuGet Version](http://img.shields.io/nuget/v/Akka.Serialization.MessagePack.svg?style=flat)](https://www.nuget.org/packages/Akka.Serialization.MessagePack/)
 
 Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-CSharp)
 
