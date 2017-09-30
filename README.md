@@ -6,14 +6,14 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 
 ## Supported platforms
 - .NET Core 2.0 (via .NET Standard 2.0)
-- .NET Framework 4.6 and higher (via .NET Standard 2.0)
+- .NET Framework 4.6.1 and higher (via .NET Standard 2.0)
 
 ## It supports
 - Primitive types (`int`, `string`, `long`, etc)
 - Build-in types (`DateTime`, `DateTimeOffset`, `TimeSpan`, `Guid`, `Uri`, `Enum`, etc)
 - Collections (`List<T>`, `HashSet<T>`, `Dictionary<TKey, TValue>`, etc)
 - Immutable Collections
-- Exceptions
+- Exceptions (only in netstandard2.0)
 - Akka.NET specific types (`ActorPath` and `ActorRef`)
 - Object types (polymorphic serialization)
 - Generic types
