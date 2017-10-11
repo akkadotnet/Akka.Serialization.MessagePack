@@ -23,9 +23,7 @@ namespace Akka.Serialization.MessagePack
         static MsgPackSerializer()
         {
             CompositeResolver.RegisterAndSetAsDefault(
-#if SERIALIZATION
                 SerializableResolver.Instance,
-#endif
                 AkkaResolver.Instance,
                 ImmutableCollectionResolver.Instance,
                 NativeDateTimeResolver.Instance,

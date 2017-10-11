@@ -13,14 +13,15 @@ Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-
 - Build-in types (`DateTime`, `DateTimeOffset`, `TimeSpan`, `Guid`, `Uri`, `Enum`, etc)
 - Collections (`List<T>`, `HashSet<T>`, `Dictionary<TKey, TValue>`, etc)
 - Immutable Collections
-- Exceptions (only in netstandard2.0)
+- Exceptions
 - Akka.NET specific types (`ActorPath` and `ActorRef`)
 - Object types (polymorphic serialization)
+- Internal and private classes
+- Internal and private class members
 - Generic types
 - Version tolerance
 
 ## It does not support
-- Internal and private classes
 - Classes with private or internal constructors
 - F# types (`Set`, `Map`, `List`, `FSharpAsync<T>`, discriminated unions)
 - Handling circular references
