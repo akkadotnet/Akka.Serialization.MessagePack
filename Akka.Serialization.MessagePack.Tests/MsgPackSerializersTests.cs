@@ -65,22 +65,7 @@ namespace Akka.Serialization.MessagePack.Tests
         }
 
         [Fact(Skip = "Not supported yet")]
-        public override void Can_Serialize_with_internal_members()
-        {
-        }
-
-        [Fact(Skip = "Not supported yet")]
-        public override void Can_Serialize_with_private_members()
-        {
-        }
-
-        [Fact(Skip = "Not supported yet")]
         public override void Can_Serialize_a_class_with_private_constructor()
-        {
-        }
-
-        [Fact(Skip = "Not supported yet")]
-        public override void Can_Serialize_internal_class()
         {
         }
     }
