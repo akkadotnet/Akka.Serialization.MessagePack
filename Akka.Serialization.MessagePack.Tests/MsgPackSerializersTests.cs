@@ -68,11 +68,6 @@ namespace Akka.Serialization.MessagePack.Tests
         public override void Can_Serialize_a_class_with_private_constructor()
         {
         }
-
-        [Fact(Skip = "Not supported yet")]
-        public override void Can_Serialize_internal_class()
-        {
-        }
     }
 
     public class MsgPackPrimiviteSerializerTests : PrimitiveSerializerTests

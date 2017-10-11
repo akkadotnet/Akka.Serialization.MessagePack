@@ -23,12 +23,12 @@ namespace Akka.Serialization.MessagePack
         static MsgPackSerializer()
         {
             CompositeResolver.RegisterAndSetAsDefault(
-#if SERIALIZATION
                 SerializableResolver.Instance,
-#endif
                 AkkaResolver.Instance,
                 ImmutableCollectionResolver.Instance,
-                TypelessContractlessStandardResolver.Instance);
+                NativeDateTimeResolver.Instance,
+                TypelessObjectResolver.Instance,
+                ContractlessStandardResolverAllowPrivate.Instance);
         }
 
         public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)

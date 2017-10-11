@@ -24,6 +24,20 @@ namespace Akka.Serialization.Testkit
         }
 
         [Fact]
+        public virtual void Can_Serialize_with_internal_members()
+        {
+            var internalClass = new IncapsulationMessages.ClassWithInternalMembers(55);
+            AssertEqual(internalClass);
+        }
+
+        [Fact]
+        public virtual void Can_Serialize_with_private_members()
+        {
+            var internalClass = new IncapsulationMessages.ClassWithPrivateMembers(55);
+            AssertEqual(internalClass);
+        }
+
+        [Fact]
         public virtual void Can_Serialize_a_class_with_internal_constructor()
         {
             var classWithInternalConstructor = new IncapsulationMessages.ClassWithInternalConstructor(55);
@@ -71,6 +85,50 @@ namespace Akka.Serialization.Testkit
                 if (ReferenceEquals(this, obj)) return true;
                 if (obj.GetType() != this.GetType()) return false;
                 return Equals((InternalClass)obj);
+            }
+
+            public override int GetHashCode() => Number;
+        }
+
+        public class ClassWithInternalMembers
+        {
+            public ClassWithInternalMembers(int number)
+            {
+                Number = number;
+            }
+
+            internal int Number { get; }
+
+            protected bool Equals(ClassWithInternalMembers other) => Number == other.Number;
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((ClassWithInternalMembers)obj);
+            }
+
+            public override int GetHashCode() => Number;
+        }
+
+        public class ClassWithPrivateMembers
+        {
+            public ClassWithPrivateMembers(int number)
+            {
+                Number = number;
+            }
+
+            private int Number { get; }
+
+            protected bool Equals(ClassWithPrivateMembers other) => Number == other.Number;
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((ClassWithPrivateMembers)obj);
             }
 
             public override int GetHashCode() => Number;
