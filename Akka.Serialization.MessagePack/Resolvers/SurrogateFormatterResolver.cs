@@ -8,18 +8,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Akka.Actor;
-using Akka.Util;
 using Akka.Util.Internal;
 using MessagePack;
 using MessagePack.Formatters;
 
 namespace Akka.Serialization.MessagePack.Resolvers
 {
-
-    static class SurrogateResolvable<T>
-    {
-        public static readonly bool IsSurrogate = (typeof(ISurrogated).IsAssignableFrom(typeof(T)));
-    }
     public class SurrogateFormatterResolver : IFormatterResolver
     {
         private readonly ActorSystem _system;
@@ -28,13 +22,13 @@ namespace Akka.Serialization.MessagePack.Resolvers
             _formatterCache =
                 new ConcurrentDictionary<Type, IMessagePackFormatter>();
 
-        private ConcurrentDictionary<Type, bool> _isResolvableCache =
-            new ConcurrentDictionary<Type, bool>();
-
         private readonly Func<Type, IMessagePackFormatter> _formatterCreateFunc;
         public SurrogateFormatterResolver(ActorSystem system)
         {
             _system = system;
+            //Cast in the func since we'll have to cache anyway.
+            //The alternative is making a 'nullable' func in another static class,
+            //But that may result in too much garbage for other types.
             _formatterCreateFunc = t =>
                 (IMessagePackFormatter)typeof(SurrogateFormatter<>)
                     .MakeGenericType(t)
@@ -62,34 +56,5 @@ namespace Akka.Serialization.MessagePack.Resolvers
             }
         }
         
-    }
-
-    public class SurrogateFormatter<T> : IMessagePackFormatter<T>
-        where T : ISurrogated
-    {
-        private readonly ActorSystem _system;
-
-        private readonly ConcurrentDictionary<Type, IMessagePackFormatter>
-            _dynamicFormatterDict = new ConcurrentDictionary<Type, IMessagePackFormatter>();
-        public SurrogateFormatter(ActorSystem system)
-        {
-            _system = system;
-        }
-
-
-        public void Serialize(ref MessagePackWriter writer, T value,
-            MessagePackSerializerOptions options)
-        {
-            options.Resolver.GetFormatter<ISurrogate>()
-                .Serialize(ref writer, value.ToSurrogate(_system), options);
-        }
-
-        public T Deserialize(ref MessagePackReader reader,
-            MessagePackSerializerOptions options)
-        {
-            var surrogate = options.Resolver.GetFormatter<ISurrogate>()
-                .Deserialize(ref reader, options);
-            return (T)surrogate.FromSurrogate(_system);
-        }
     }
 }
