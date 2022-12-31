@@ -5,107 +5,91 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Akka.Actor;
+using Akka.Util;
 using Akka.Util.Internal;
 using MessagePack;
 using MessagePack.Formatters;
 
 namespace Akka.Serialization.MessagePack.Resolvers
 {
-    public class AkkaResolver : IFormatterResolver
-    {
-        public static IFormatterResolver Instance = new AkkaResolver();
-        private AkkaResolver() { }
-        public IMessagePackFormatter<T> GetFormatter<T>() => FormatterCache<T>.Formatter;
 
-        private static class FormatterCache<T>
-        {
-            public static IMessagePackFormatter<T> Formatter { get; }
-            static FormatterCache() => Formatter = (IMessagePackFormatter<T>)AkkaResolverGetFormatterHelper.GetFormatter(typeof(T));
-        }
+    static class SurrogateResolvable<T>
+    {
+        public static readonly bool IsSurrogate = (typeof(ISurrogated).IsAssignableFrom(typeof(T)));
     }
-
-    internal static class AkkaResolverGetFormatterHelper
+    public class SurrogateFormatterResolver : IFormatterResolver
     {
-        private static readonly Dictionary<Type, object> FormatterMap = new Dictionary<Type, object>
+        private readonly ActorSystem _system;
+
+        private ConcurrentDictionary<Type, IMessagePackFormatter>
+            _formatterCache =
+                new ConcurrentDictionary<Type, IMessagePackFormatter>();
+
+        private ConcurrentDictionary<Type, bool> _isResolvableCache =
+            new ConcurrentDictionary<Type, bool>();
+
+        private readonly Func<Type, IMessagePackFormatter> _formatterCreateFunc;
+        public SurrogateFormatterResolver(ActorSystem system)
         {
-            {typeof(ActorPath), new ActorPathFormatter<ActorPath>()},
-            {typeof(ChildActorPath), new ActorPathFormatter<ChildActorPath>()},
-            {typeof(RootActorPath), new ActorPathFormatter<RootActorPath>()},
-            {typeof(IActorRef), new ActorRefFormatter<IActorRef>()},
-            {typeof(IInternalActorRef), new ActorRefFormatter<IInternalActorRef>()},
-            {typeof(RepointableActorRef), new ActorRefFormatter<RepointableActorRef>()}
-        };
+            _system = system;
+            _formatterCreateFunc = t =>
+                (IMessagePackFormatter)typeof(SurrogateFormatter<>)
+                    .MakeGenericType(t)
+                    .GetConstructor(new[] { typeof(ActorSystem) })
+                    .Invoke(new[] { _system });
 
-        internal static object GetFormatter(Type t) => FormatterMap.TryGetValue(t, out var formatter) ? formatter : null;
-    }
-
-    // IActorRef
-    public class ActorRefFormatter<T> : IMessagePackFormatter<T> where T : IActorRef
-    {
-        public int Serialize(ref byte[] bytes, int offset, T value, IFormatterResolver formatterResolver)
-        {
-            if (value == null)
-            {
-                return MessagePackBinary.WriteNil(ref bytes, offset);
-            }
-
-            var startOffset = offset;
-            offset += MessagePackBinary.WriteString(ref bytes, offset, Serialization.SerializedActorPath(value));
-            return offset - startOffset;
         }
-
-        public T Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public IMessagePackFormatter<T> GetFormatter<T>()
         {
-            if (MessagePackBinary.IsNil(bytes, offset))
+            
+            //if (typeof(ISurrogated).IsAssignableFrom(typeof(T)))
+            if (SurrogateResolvable<T>.IsSurrogate)
             {
-                readSize = 1;
-                return default(T);
+                return (IMessagePackFormatter<T>)_formatterCache.GetOrAdd(
+                    typeof(T),
+                    _formatterCreateFunc);
+                //(k) => (IMessagePackFormatter)typeof(SurrogateFormatter<>)
+                //    .MakeGenericType(k)
+                //    .GetConstructor(new[] { typeof(ActorSystem) })
+                //    .Invoke(new[] { _system }));
             }
-
-            int startOffset = offset;
-
-            var path = MessagePackBinary.ReadString(bytes, offset, out readSize);
-
-            var system = MsgPackSerializer.LocalSystem.Value.AsInstanceOf<ExtendedActorSystem>();
-            if (system == null)
-                return default(T);
-
-            readSize = offset - startOffset;
-            return (T)system.Provider.ResolveActorRef(path);
-        }
-    }
-
-    // ActorPath
-    public class ActorPathFormatter<T> : IMessagePackFormatter<T> where T : ActorPath
-    {
-        public int Serialize(ref byte[] bytes, int offset, T value, IFormatterResolver formatterResolver)
-        {
-            if (value == null)
+            else
             {
-                return MessagePackBinary.WriteNil(ref bytes, offset);
-            }
-
-            var startOffset = offset;
-            offset += MessagePackBinary.WriteString(ref bytes, offset, value.ToSerializationFormat());
-            return offset - startOffset;
-        }
-
-        public T Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
-        {
-            if (MessagePackBinary.IsNil(bytes, offset))
-            {
-                readSize = 1;
                 return null;
             }
+        }
+        
+    }
 
-            int startOffset = offset;
+    public class SurrogateFormatter<T> : IMessagePackFormatter<T>
+        where T : ISurrogated
+    {
+        private readonly ActorSystem _system;
 
-            var path = MessagePackBinary.ReadString(bytes, offset, out readSize);
+        private readonly ConcurrentDictionary<Type, IMessagePackFormatter>
+            _dynamicFormatterDict = new ConcurrentDictionary<Type, IMessagePackFormatter>();
+        public SurrogateFormatter(ActorSystem system)
+        {
+            _system = system;
+        }
 
-            readSize = offset - startOffset;
-            return ActorPath.TryParse(path, out var actorPath) ? (T)actorPath : null;
+
+        public void Serialize(ref MessagePackWriter writer, T value,
+            MessagePackSerializerOptions options)
+        {
+            options.Resolver.GetFormatter<ISurrogate>()
+                .Serialize(ref writer, value.ToSurrogate(_system), options);
+        }
+
+        public T Deserialize(ref MessagePackReader reader,
+            MessagePackSerializerOptions options)
+        {
+            var surrogate = options.Resolver.GetFormatter<ISurrogate>()
+                .Deserialize(ref reader, options);
+            return (T)surrogate.FromSurrogate(_system);
         }
     }
 }

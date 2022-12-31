@@ -7,6 +7,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text;
 using Akka.Util.Internal;
 using MessagePack;
 using MessagePack.Formatters;
@@ -38,51 +39,44 @@ namespace Akka.Serialization.MessagePack.Resolvers
     public class SerializableFormatter<T> : IMessagePackFormatter<T>
     {
         private static readonly IMessagePackFormatter<object> ObjectFormatter = TypelessFormatter.Instance;
-        
-        public int Serialize(ref byte[] bytes, int offset, T value, IFormatterResolver formatterResolver)
+
+        public void Serialize(ref MessagePackWriter writer, T value,
+            MessagePackSerializerOptions options)
         {
             if (value == null)
             {
-                return MessagePackBinary.WriteNil(ref bytes, offset);
+                writer.WriteNil();
+                return;
             }
-           
-            var startOffset = offset;
 
             var serializable = value as ISerializable;
             var serializationInfo = new SerializationInfo(value.GetType(), new FormatterConverter());
             serializable.GetObjectData(serializationInfo, new StreamingContext());
-
-            offset += MessagePackBinary.WriteMapHeader(ref bytes, offset, serializationInfo.MemberCount);
+            
+            writer.WriteMapHeader(serializationInfo.MemberCount);
             foreach (var info in serializationInfo)
             {
-                offset += MessagePackBinary.WriteString(ref bytes, offset, info.Name);
-                offset += ObjectFormatter.Serialize(ref bytes, offset, info.Value, formatterResolver);
+                writer.WriteString(Encoding.UTF8.GetBytes(info.Name));
+                ObjectFormatter.Serialize(ref writer, info.Value, options);
             }
-
-            return offset - startOffset;
         }
 
-        public T Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public T Deserialize(ref MessagePackReader reader,
+            MessagePackSerializerOptions options)
         {
-            if (MessagePackBinary.IsNil(bytes, offset))
+            if (reader.IsNil)
             {
-                readSize = 1;
+                reader.ReadNil();
                 return default(T);
             }
 
-            int startOffset = offset;
             var serializationInfo = new SerializationInfo(typeof(T), new FormatterConverter());
 
-            var len = MessagePackBinary.ReadMapHeader(bytes, offset, out readSize);
-            offset += readSize;
-
+            var len = reader.ReadMapHeader();
             for (int i = 0; i < len; i++)
             {
-                var key = MessagePackBinary.ReadString(bytes, offset, out readSize);
-                offset += readSize;
-                var val = ObjectFormatter.Deserialize(bytes, offset, formatterResolver, out readSize);
-                offset += readSize;
-
+                var key = reader.ReadString();
+                var val = ObjectFormatter.Deserialize(ref reader,options);
                 serializationInfo.AddValue(key, val);
             }
 
@@ -98,8 +92,6 @@ namespace Akka.Serialization.MessagePack.Resolvers
                 object[] args = { serializationInfo, new StreamingContext() };
                 obj = constructorInfo.Invoke(args).AsInstanceOf<ISerializable>();
             }
-
-            readSize = offset - startOffset;
             return (T)obj;
         }
     }

@@ -10,26 +10,19 @@ using Akka.Actor;
 using Akka.Configuration;
 using Akka.Serialization.MessagePack.Resolvers;
 using MessagePack;
+using MessagePack.Formatters;
 using MessagePack.ImmutableCollection;
 using MessagePack.Resolvers;
 
 namespace Akka.Serialization.MessagePack
 {
+    
     public sealed class MsgPackSerializer : Serializer
     {
-        internal static AsyncLocal<ActorSystem> LocalSystem = new AsyncLocal<ActorSystem>();
+        //internal static AsyncLocal<ActorSystem> LocalSystem = new AsyncLocal<ActorSystem>();
         private readonly MsgPackSerializerSettings _settings;
-
-        static MsgPackSerializer()
-        {
-            CompositeResolver.RegisterAndSetAsDefault(
-#if SERIALIZATION
-                SerializableResolver.Instance,
-#endif
-                AkkaResolver.Instance,
-                ImmutableCollectionResolver.Instance,
-                TypelessContractlessStandardResolver.Instance);
-        }
+        private readonly IFormatterResolver _resolver;
+        private readonly MessagePackSerializerOptions _serializerOptions;
 
         public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)
         {
@@ -42,31 +35,39 @@ namespace Akka.Serialization.MessagePack
 
         public MsgPackSerializer(ExtendedActorSystem system, MsgPackSerializerSettings settings) : base(system)
         {
-            LocalSystem.Value = system;
             _settings = settings;
+            
+            _resolver = CompositeResolver.Create(SerializableResolver.Instance,
+                ImmutableCollectionResolver.Instance,
+                new SurrogateFormatterResolver(base.system),
+                TypelessContractlessStandardResolver.Instance);
+            var opts =
+                new MessagePackSerializerOptions(_resolver);
+            _serializerOptions = _settings.EnableLz4Compression? opts.WithCompression(MessagePackCompression.Lz4Block): opts;
+            
         }
 
         public override byte[] ToBinary(object obj)
         {
-            if (_settings.EnableLz4Compression)
+            //if (_settings.EnableLz4Compression)
+            //{
+            //    return LZ4MessagePackSerializer.NonGeneric.Serialize(obj.GetType(), obj);
+            //}
+            //else
             {
-                return LZ4MessagePackSerializer.NonGeneric.Serialize(obj.GetType(), obj);
-            }
-            else
-            {
-                return MessagePackSerializer.NonGeneric.Serialize(obj.GetType(), obj);
+                return MessagePackSerializer.Serialize(obj.GetType(), obj,_serializerOptions);
             }
         }
 
         public override object FromBinary(byte[] bytes, Type type)
         {
-            if (_settings.EnableLz4Compression)
+            //if (_settings.EnableLz4Compression)
+            //{
+            //    return LZ4MessagePackSerializer.NonGeneric.Deserialize(type, bytes);
+            //}
+            //else
             {
-                return LZ4MessagePackSerializer.NonGeneric.Deserialize(type, bytes);
-            }
-            else
-            {
-                return MessagePackSerializer.NonGeneric.Deserialize(type, bytes);
+                return MessagePackSerializer.Deserialize(type, bytes,_serializerOptions);
             }
         }
 
