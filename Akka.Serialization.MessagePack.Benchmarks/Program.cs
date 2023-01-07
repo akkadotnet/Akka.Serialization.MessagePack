@@ -11,7 +11,7 @@ namespace Akka.Serialization.MessagePack.Benchmarks
     {
         public MyConfig()
         {
-            Add(Job.Default.With(CsProjCoreToolchain.NetCoreApp20).With(Platform.X64).WithGcServer(true).WithId("NETCORE 2.0"));
+            Add(Job.Default.With(CsProjCoreToolchain.NetCoreApp31).With(Platform.X64).WithGcServer(true));
             this.Options =
                 Options | ConfigOptions.DisableOptimizationsValidator;
         }

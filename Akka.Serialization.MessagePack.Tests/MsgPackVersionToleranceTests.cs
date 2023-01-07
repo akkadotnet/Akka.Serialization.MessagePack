@@ -25,7 +25,7 @@ namespace Akka.Serialization.MessagePack.Tests
         public void Can_deserialize_Uri_message_which_was_serialized_on_full_NET()
         {
             var ser = new MsgPackSerializer((ExtendedActorSystem)Sys,
-                new MsgPackSerializerSettings(false));
+                new MsgPackSerializerSettings(MsgPackSerializerSettings.Lz4Settings.None));
             // TypelessClass with System.URI serialized on .NET
             var serializedString = "gaZOZXN0ZWTJAAAAbWTZVVN5c3RlbS5VcmksIFN5c3RlbSwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODm1aHR0cDovL21pY3Jvc29mdC5jb20v";
 
@@ -39,7 +39,7 @@ namespace Akka.Serialization.MessagePack.Tests
         public void Can_deserialize_TimeSpan_message_which_was_serialized_on_full_NET()
         {
             var ser = new MsgPackSerializer((ExtendedActorSystem)Sys,
-                new MsgPackSerializerSettings(false));
+                new MsgPackSerializerSettings(MsgPackSerializerSettings.Lz4Settings.None));
             // TypelessClass with System.TimeSpan serialized on .NET
             var serializedString = "gaZOZXN0ZWTJAAAAH2S5U3lzdGVtLlRpbWVTcGFuLCBtc2NvcmxpYs6y0F4A";
 
@@ -52,7 +52,7 @@ namespace Akka.Serialization.MessagePack.Tests
         public void Can_ignore_unexpected_data()
         {
             var ser = new MsgPackSerializer((ExtendedActorSystem)Sys,
-                new MsgPackSerializerSettings(false));
+                new MsgPackSerializerSettings(MsgPackSerializerSettings.Lz4Settings.None));
             var address2 = new AddressV2 { City = "New York", Country = "USA", Street = "Jr. Someone" };
 
             byte[] serialized = ser.ToBinary(address2);
@@ -66,7 +66,7 @@ namespace Akka.Serialization.MessagePack.Tests
         public void Can_tolerate_with_missing_data()
         {
             var ser = new MsgPackSerializer((ExtendedActorSystem)Sys,
-                new MsgPackSerializerSettings(false));
+                new MsgPackSerializerSettings(MsgPackSerializerSettings.Lz4Settings.None));
             var address2 = new AddressV1 { City = "New York", Street = "Jr. Someone" };
 
             byte[] serialized = ser.ToBinary(address2);
@@ -81,7 +81,7 @@ namespace Akka.Serialization.MessagePack.Tests
         public void Can_tolerate_with_missing_data_with_defaults()
         {
             var ser = new MsgPackSerializer((ExtendedActorSystem)Sys,
-                new MsgPackSerializerSettings(false));
+                new MsgPackSerializerSettings(MsgPackSerializerSettings.Lz4Settings.None));
             var address2 = new AddressV1 { City = "New York", Street = "Jr. Someone" };
 
             byte[] serialized = ser.ToBinary(address2);

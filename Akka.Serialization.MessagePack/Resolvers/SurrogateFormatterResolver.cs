@@ -16,16 +16,14 @@ namespace Akka.Serialization.MessagePack.Resolvers
 {
     public class SurrogateFormatterResolver : IFormatterResolver
     {
-        private readonly ActorSystem _system;
 
-        private ConcurrentDictionary<Type, IMessagePackFormatter>
+        private readonly ConcurrentDictionary<Type, IMessagePackFormatter>
             _formatterCache =
                 new ConcurrentDictionary<Type, IMessagePackFormatter>();
 
         private readonly Func<Type, IMessagePackFormatter> _formatterCreateFunc;
-        public SurrogateFormatterResolver(ActorSystem system)
+        public SurrogateFormatterResolver(ExtendedActorSystem system)
         {
-            _system = system;
             //Cast in the func since we'll have to cache anyway.
             //The alternative is making a 'nullable' func in another static class,
             //But that may result in too much garbage for other types.
@@ -33,22 +31,16 @@ namespace Akka.Serialization.MessagePack.Resolvers
                 (IMessagePackFormatter)typeof(SurrogateFormatter<>)
                     .MakeGenericType(t)
                     .GetConstructor(new[] { typeof(ActorSystem) })
-                    .Invoke(new[] { _system });
+                    .Invoke(new[] { system });
 
         }
         public IMessagePackFormatter<T> GetFormatter<T>()
         {
-            
-            //if (typeof(ISurrogated).IsAssignableFrom(typeof(T)))
             if (SurrogateResolvable<T>.IsSurrogate)
             {
                 return (IMessagePackFormatter<T>)_formatterCache.GetOrAdd(
                     typeof(T),
                     _formatterCreateFunc);
-                //(k) => (IMessagePackFormatter)typeof(SurrogateFormatter<>)
-                //    .MakeGenericType(k)
-                //    .GetConstructor(new[] { typeof(ActorSystem) })
-                //    .Invoke(new[] { _system }));
             }
             else
             {

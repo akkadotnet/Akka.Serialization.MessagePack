@@ -28,8 +28,16 @@ namespace Akka.Serialization.MessagePack.Resolvers
     {
         internal static object GetFormatter<T>()
         {
-            return typeof(Exception).IsAssignableFrom(typeof(T)) ? new SerializableFormatter<T>() : null;
+            return SerializableFormatterAssignable<T>.IsAssignableFrom
+                ? new SerializableFormatter<T>()
+                : null;
         }
+    }
+
+    internal static class SerializableFormatterAssignable<T>
+    {
+        public static readonly bool IsAssignableFrom =
+            typeof(Exception).IsAssignableFrom(typeof(T));
     }
 }
 #endif
