@@ -20,7 +20,6 @@ using Newtonsoft.Json;
 
 namespace Akka.Serialization.MessagePack
 {
-    
     public sealed class MsgPackSerializer : Serializer
     {
         private readonly MsgPackSerializerSettings _settings;
@@ -133,7 +132,7 @@ namespace Akka.Serialization.MessagePack
             opts = opts.WithAllowAssemblyVersionMismatch(_settings
                 .AllowAssemblyVersionMismatch);
             opts = opts.WithOmitAssemblyVersion(_settings.OmitAssemblyVersion);
-            _serializerOptions = opts;
+            _serializerOptions = new MessagePackTypeFilteringOptions(opts);
 
         }
 
@@ -146,9 +145,7 @@ namespace Akka.Serialization.MessagePack
 
         public override object FromBinary(byte[] bytes, Type type)
         {
-            {
-                return MessagePackSerializer.Deserialize(type, bytes,_serializerOptions);
-            }
+            return MessagePackSerializer.Deserialize(type, bytes,_serializerOptions);
         }
 
         public override int Identifier => 150;
