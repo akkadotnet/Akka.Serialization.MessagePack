@@ -14,7 +14,7 @@ using MessagePack.Formatters;
 
 namespace Akka.Serialization.MessagePack.Resolvers
 {
-    public class SurrogateFormatterResolver : IFormatterResolver
+    public class SurrogatedFormatterResolver : IFormatterResolver
     {
 
         private readonly ConcurrentDictionary<Type, IMessagePackFormatter>
@@ -22,13 +22,13 @@ namespace Akka.Serialization.MessagePack.Resolvers
                 new ConcurrentDictionary<Type, IMessagePackFormatter>();
 
         private readonly Func<Type, IMessagePackFormatter> _formatterCreateFunc;
-        public SurrogateFormatterResolver(ExtendedActorSystem system)
+        public SurrogatedFormatterResolver(ExtendedActorSystem system)
         {
             //Cast in the func since we'll have to cache anyway.
             //The alternative is making a 'nullable' func in another static class,
             //But that may result in too much garbage for other types.
             _formatterCreateFunc = t =>
-                (IMessagePackFormatter)typeof(SurrogateFormatter<>)
+                (IMessagePackFormatter)typeof(SurrogatedFormatter<>)
                     .MakeGenericType(t)
                     .GetConstructor(new[] { typeof(ActorSystem) })
                     .Invoke(new[] { system });
@@ -36,7 +36,7 @@ namespace Akka.Serialization.MessagePack.Resolvers
         }
         public IMessagePackFormatter<T> GetFormatter<T>()
         {
-            if (SurrogateResolvable<T>.IsSurrogate)
+            if (SurrogateResolvable<T>.IsSurrogated)
             {
                 return (IMessagePackFormatter<T>)_formatterCache.GetOrAdd(
                     typeof(T),

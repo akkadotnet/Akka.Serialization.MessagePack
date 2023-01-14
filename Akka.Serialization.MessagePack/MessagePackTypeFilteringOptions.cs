@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using MessagePack;
 using MessagePack.Formatters;
 
@@ -72,6 +73,7 @@ namespace Akka.Serialization.MessagePack
             base.ThrowIfDeserializingTypeIsDisallowed(type);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private bool setAllowed(Type type)
         {
             bool allowed;

@@ -109,7 +109,7 @@ namespace Akka.Serialization.MessagePack
                 {
                     SerializableResolver.Instance,
                     ImmutableCollectionResolver.Instance,
-                    new SurrogateFormatterResolver(system)
+                    new SurrogatedFormatterResolver(system)
                 })
                 .Concat(_settings.Converters.Select(t =>
                     LoadFormatterResolverByType(t, system)))
