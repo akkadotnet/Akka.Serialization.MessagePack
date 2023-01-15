@@ -34,13 +34,16 @@ namespace Akka.Serialization.MessagePack.Resolvers
              
                 //Rather than relying on TypelessFormatter, it is better for us
                 //  to use the exact type formatter alongside manual serialization of type.
-                //  
+                //
+                // TODO: See notes in deserialize about future improvements
+                //  for well known types.
+                writer.WriteArrayHeader(2);
                 var surrogate = value.ToSurrogate(_system);
                 var surT = surrogate.GetType();
                 options.Resolver.GetFormatter<string>()
                     .Serialize(ref writer, surT.TypeQualifiedName(), options);
                 MessagePackSerializer.Serialize(surT, ref writer,
-                    surrogate, options);   
+                    surrogate, options);
             }
         }
 
@@ -54,6 +57,12 @@ namespace Akka.Serialization.MessagePack.Resolvers
             else
             {
                 //TODO: Look into a way to avoid creating a string here.
+                //
+                //TODO: In future, we can use switching on well-known types,
+                //  alongside a 3-slot array with (int,null,realdata)
+                // that would let us switch on int,
+                // rather than sniff type below.
+                reader.ReadArrayHeader();
                 var typeStr = options.Resolver.GetFormatter<string>()
                     .Deserialize(ref reader, options);
                 var deserType =
