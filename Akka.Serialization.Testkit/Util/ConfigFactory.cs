@@ -14,9 +14,7 @@ namespace Akka.Serialization.Testkit.Util
         {
             return @"
                 akka.actor {
-                    serializers {
-                        msgpack = """ + serializerType.AssemblyQualifiedName + @"""
-                    }
+                    serializers.msgpack = """ + serializerType.AssemblyQualifiedName + @"""
                     serialization-bindings {
                       ""System.Object"" = msgpack
                     }
