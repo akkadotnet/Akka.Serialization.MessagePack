@@ -24,7 +24,7 @@ namespace Akka.Serialization.MessagePack
     {
         private readonly MsgPackSerializerSettings _settings;
         private readonly IFormatterResolver _resolver;
-        private readonly MessagePackSerializerOptions _serializerOptions;
+        public readonly MessagePackSerializerOptions _serializerOptions;
 
         public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)
         {
@@ -37,6 +37,10 @@ namespace Akka.Serialization.MessagePack
         
         
 
+        ///<remarks>
+        /// Borrowed from <see cref="NewtonSoftJsonSerializer"/>,
+        /// The concept is very similar if slightly more layered for perf.
+        /// </remarks>
         public static IFormatterResolver LoadFormatterResolverByType(Type type, ExtendedActorSystem system)
         {
             //This -should- be double checked by others, but just in case :)
@@ -103,19 +107,30 @@ namespace Akka.Serialization.MessagePack
             MsgPackSerializerSettings settings) : base(system)
         {
             _settings = settings;
-            _resolver = CompositeResolver.Create(_settings.OverrideConverters
-                .Select(t => LoadFormatterResolverByType(t, system))
-                .Concat(new[]
-                {
-                    SerializableResolver.Instance,
-                    ImmutableCollectionResolver.Instance,
-                    new SurrogatedFormatterResolver(system)
-                })
-                .Concat(_settings.Converters.Select(t =>
-                    LoadFormatterResolverByType(t, system)))
-                .Concat(new[]{
-                    TypelessContractlessStandardResolver.Instance})
-                .ToArray());
+            //Set up the chain of resolvers;
+            //First, we allow 'Overrides' that users put in at their own peril.
+            //Then, we load our standard set of converters, which includes
+            //Serializable(really just exceptions),
+            //Immutable Collections, and our Surrogate Resolver
+            //Then we add whatever custom serializers are specified,
+            //Lastly dropping into the TypelessContractLess Resolver.
+            //
+            _resolver = CompositeResolver.Create(
+                _settings.OverrideConverters.Select(t =>
+                        LoadFormatterResolverByType(t, system))
+                    .Concat(new[]
+                    {
+                        SerializableResolver.Instance,
+                        ImmutableCollectionResolver.Instance,
+                        new SurrogatedFormatterResolver(system)
+                    })
+                    .Concat(_settings.Converters.Select(t =>
+                        LoadFormatterResolverByType(t, system)))
+                    .Concat(new[]
+                    {
+                        TypelessContractlessStandardResolver.Instance
+                    })
+                    .ToArray());
             var opts =
                 new MessagePackSerializerOptions(_resolver);
             if (_settings.EnableLz4Compression == MsgPackSerializerSettings.Lz4Settings.Lz4Block)
@@ -132,6 +147,9 @@ namespace Akka.Serialization.MessagePack
             opts = opts.WithAllowAssemblyVersionMismatch(_settings
                 .AllowAssemblyVersionMismatch);
             opts = opts.WithOmitAssemblyVersion(_settings.OmitAssemblyVersion);
+            //We handle type filtering via our own options set.
+            //By doing so, the existing Typeless API will hook in,
+            //i.e. we don't have to write our own Typeless Filter.
             _serializerOptions = new MessagePackTypeFilteringOptions(opts);
 
         }
@@ -148,7 +166,7 @@ namespace Akka.Serialization.MessagePack
             return MessagePackSerializer.Deserialize(type, bytes,_serializerOptions);
         }
 
-        public override int Identifier => 150;
+        public override int Identifier => 151;
 
         public override bool IncludeManifest => true;
     }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Akka" Version="1.4.47" />
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.1.0" />
     <PackageReference Include="MessagePack" Version="2.4.59" />
     <PackageReference Include="MessagePack.ImmutableCollection" Version="2.4.59" />
   </ItemGroup>
