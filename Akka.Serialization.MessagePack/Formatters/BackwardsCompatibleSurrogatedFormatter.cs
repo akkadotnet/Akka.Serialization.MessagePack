@@ -1,62 +1,13 @@
-using System;
 using System.Buffers;
-using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
 using Akka.Actor;
-using Akka.Pattern;
 using Akka.Util;
-using Akka.Util.Reflection;
 using CommunityToolkit.HighPerformance.Buffers;
 using MessagePack;
 using MessagePack.Formatters;
-using Microsoft.NET.StringTools;
 
 namespace Akka.Serialization.MessagePack.Resolvers
 {
-    class SurrogatedFormatterTools
-    {
-        private static readonly ConcurrentDictionary<string, Type> deserTypeCache =
-            new ConcurrentDictionary<string, Type>();
-
-       // internal static readonly ReadOnlyMemory<byte> baseArraySpan = new byte[]
-       //     { (byte)(MessagePackCode.MinFixArray | (byte)3) };
-
-        private static readonly Func<string, Type>
-            typeLookupFactory = t => Type.GetType(t, true);
-
-        internal static Type GetTypeForShortName(string type)
-        {
-            if (deserTypeCache.TryGetValue(type, out var val))
-            {
-                return val;
-            }
-            else
-            {
-                return deserTypeCache.GetOrAdd(type, typeLookupFactory);   
-            }
-        }
-        
-    }
-
-    public sealed class MalformedPayloadException : SerializationException
-    {
-        public MalformedPayloadException(string message) : base(message)
-        {
-            
-        }
-        public MalformedPayloadException(string message, Exception exception) : base(message,exception)
-        {
-            
-        }
-    }
-
-    public interface IDoNotUsePolymorphicFormatter
-    {
-        
-    }
-
     /// <summary>
     /// A Formatter that handles converting Surrogated types to/from their
     /// Surrogate representation 
@@ -73,15 +24,14 @@ namespace Akka.Serialization.MessagePack.Resolvers
     /// (Internal to <see cref="SurrogatedFormatterTools"/>)
     /// We then call Deserialize with the type to properly read the data.
     /// </remarks>
-    public class SurrogatedFormatter<T> : IMessagePackFormatter<T>, IDoNotUsePolymorphicFormatter
+    public class BackwardsCompatibleSurrogatedFormatter<T> : IMessagePackFormatter<T>, IDoNotUsePolymorphicFormatter
         where T : ISurrogated
     {
-        private readonly ActorSystem _system;
-        private static readonly StringPool _pool = new StringPool();
+        private readonly ExtendedActorSystem _system;
 
-        public SurrogatedFormatter(ActorSystem system)
+        public BackwardsCompatibleSurrogatedFormatter(ActorSystem system)
         {
-            _system = system;
+            _system = (ExtendedActorSystem)system;
         }
 
         public void Serialize(ref MessagePackWriter writer, T value,
@@ -102,12 +52,12 @@ namespace Akka.Serialization.MessagePack.Resolvers
                 
                 writer.WriteArrayHeader(3);
                 //writer.WriteRaw(SurrogatedFormatterTools.baseArraySpan.Span);
-                    writer.WriteInt32(0);
-                    var surT = surrogate.GetType();
-                    options.Resolver.GetFormatter<string>()
-                        .Serialize(ref writer, surT.TypeQualifiedName(), options);
-                    MessagePackSerializer.Serialize(surT, ref writer,
-                        surrogate, options);    
+                writer.WriteInt32(0);
+                var surT = surrogate.GetType();
+                options.Resolver.GetFormatter<string>()
+                    .Serialize(ref writer, surT.TypeQualifiedName(), options);
+                MessagePackSerializer.Serialize(surT, ref writer,
+                    surrogate, options);    
                 
                 
             }
@@ -122,6 +72,25 @@ namespace Akka.Serialization.MessagePack.Resolvers
             }
             else
             {
+                if (typeof(T) == typeof(ActorPath)
+                    || typeof(T) == typeof(ChildActorPath)
+                    || typeof(T) == typeof(RootActorPath))
+                {
+                    if (reader.NextMessagePackType == MessagePackType.String)
+                    {
+                        return deserializeOldPathFormat(reader, options);
+                    }
+                }
+                else if (typeof(T) == typeof(IActorRef)
+                         || typeof(T) == typeof(IInternalActorRef)
+                         || typeof(T) == typeof(RepointableActorRef))
+                {
+                    if (reader.NextMessagePackType == MessagePackType.String)
+                    {
+                        return deserializeOldRefFormat(reader, options);
+                    }
+                }
+                
                 //TODO: Look into a way to avoid creating a string here.
                 //
                 //TODO: In future, we can use switching on well-known types,
@@ -146,6 +115,19 @@ namespace Akka.Serialization.MessagePack.Resolvers
             }
         }
 
+        private T deserializeOldPathFormat(MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            var pathStr = reader.ReadString();
+            return ActorPath.TryParse(pathStr, out var actorPath) ? (T)(object)actorPath : default;
+        }
+
+        private T deserializeOldRefFormat(MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            var pathStr = reader.ReadString();
+            return (T)((ExtendedActorSystem)_system).Provider.ResolveActorRef(
+                pathStr);
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static T throwInvalidLengthHelper(int entries)
         {
@@ -156,6 +138,7 @@ namespace Akka.Serialization.MessagePack.Resolvers
         private T readValueFallBack(ref MessagePackReader reader,
             MessagePackSerializerOptions options, int arraySize)
         {
+            //TODO: This feels unsafe.
             reader.Skip();
             var v = readValueDefault(ref reader, options);
             while (arraySize > 2)

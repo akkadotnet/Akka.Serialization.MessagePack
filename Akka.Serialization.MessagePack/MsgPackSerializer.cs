@@ -25,6 +25,7 @@ namespace Akka.Serialization.MessagePack
         private readonly MsgPackSerializerSettings _settings;
         private readonly IFormatterResolver _resolver;
         public readonly MessagePackSerializerOptions _serializerOptions;
+        private readonly IFormatterResolver _polymorphicResolver;
 
         public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)
         {
@@ -122,7 +123,11 @@ namespace Akka.Serialization.MessagePack
                     {
                         SerializableResolver.Instance,
                         ImmutableCollectionResolver.Instance,
-                        new SurrogatedFormatterResolver(system)
+                        settings.UseOldFormatterCompatibility
+                            ? (IFormatterResolver)new
+                                BackwardsCompatibleSurrogatedFormatterResolver(
+                                    base.system)
+                            : new SurrogatedFormatterResolver(system)
                     })
                     .Concat(_settings.Converters.Select(t =>
                         LoadFormatterResolverByType(t, system)))
@@ -131,8 +136,9 @@ namespace Akka.Serialization.MessagePack
                         TypelessContractlessStandardResolver.Instance
                     })
                     .ToArray());
+            _polymorphicResolver = new PolymorphicFormatterResolver(_resolver);
             var opts =
-                new MessagePackSerializerOptions(_resolver);
+                new MessagePackSerializerOptions(_polymorphicResolver);
             if (_settings.EnableLz4Compression == MsgPackSerializerSettings.Lz4Settings.Lz4Block)
             {
                 opts = opts.WithCompression(MessagePackCompression.Lz4Block);

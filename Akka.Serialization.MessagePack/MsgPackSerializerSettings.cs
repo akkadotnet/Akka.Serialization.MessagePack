@@ -22,7 +22,7 @@ namespace Akka.Serialization.MessagePack
             Lz4BlockArray
         }
         public MsgPackSerializerSettings(Lz4Settings enableLz4Compression) : this(
-            enableLz4Compression, Array.Empty<Type>(), Array.Empty<Type>(), true,true)
+            enableLz4Compression, Array.Empty<Type>(), Array.Empty<Type>(), true,true,false)
         {
             
         }
@@ -32,17 +32,19 @@ namespace Akka.Serialization.MessagePack
         public IEnumerable<Type> Converters { get;}
         public bool OmitAssemblyVersion { get; }
         public bool AllowAssemblyVersionMismatch { get; }
+        public bool UseOldFormatterCompatibility { get; }
 
         public static readonly MsgPackSerializerSettings Default = new MsgPackSerializerSettings(
             enableLz4Compression: Lz4Settings.None);
 
-        private MsgPackSerializerSettings(Lz4Settings enableLz4Compression, IEnumerable<Type> overrideConverterTypes, IEnumerable<Type> converterTypes, bool allowAssemblyVersionMismatch, bool omitAssemblyVersion)
+        private MsgPackSerializerSettings(Lz4Settings enableLz4Compression, IEnumerable<Type> overrideConverterTypes, IEnumerable<Type> converterTypes, bool allowAssemblyVersionMismatch, bool omitAssemblyVersion, bool useOldFormatterCompatibility)
         {
             EnableLz4Compression = enableLz4Compression;
             OverrideConverters = overrideConverterTypes.ToArray();
             Converters = converterTypes.ToArray();
             AllowAssemblyVersionMismatch = allowAssemblyVersionMismatch;
             OmitAssemblyVersion = omitAssemblyVersion;
+            UseOldFormatterCompatibility = useOldFormatterCompatibility;
         }
 
         public static MsgPackSerializerSettings Create(Config config)
@@ -53,8 +55,9 @@ namespace Akka.Serialization.MessagePack
                 enableLz4Compression: GetLz4Settings(config),
                 GetOverrideConverterTypes(config),
                 GetConverterTypes(config),
-                config.GetBoolean("allow-assembly-version-mismatch",true),
-                config.GetBoolean("omit-assembly-version",true));
+                config.GetBoolean("allow-assembly-version-mismatch", true),
+                config.GetBoolean("omit-assembly-version", true),
+                config.GetBoolean("use-old-formatter-compatibility", false));
         }
 
         private static Lz4Settings GetLz4Settings(Config config)
