@@ -8,6 +8,11 @@ using MessagePack.Formatters;
 
 namespace Akka.Serialization.MessagePack
 {
+    /// <summary>
+    /// A Custom <see cref="MessagePackSerializerOptions"/>
+    /// That allows us to, among other things,
+    /// Apply custom type filtering logic.
+    /// </summary>
     public class MessagePackTypeFilteringOptions : MessagePackSerializerOptions
     {
         private MessagePackTypeFilteringOptions(IFormatterResolver resolver) : base(resolver)
@@ -70,7 +75,7 @@ namespace Akka.Serialization.MessagePack
             {
                 throw new MessagePackSerializationException("Deserialization attempted to create the type " + type.FullName + " which is not allowed.");
             }
-            base.ThrowIfDeserializingTypeIsDisallowed(type);
+            //base.ThrowIfDeserializingTypeIsDisallowed(type);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

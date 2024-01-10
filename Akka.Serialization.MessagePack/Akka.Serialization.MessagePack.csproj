@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Akka"/>
+    <PackageReference Include="CommunityToolkit.HighPerformance" />
     <PackageReference Include="MessagePack"/>
     <PackageReference Include="MessagePack.ImmutableCollection" />
   </ItemGroup>
