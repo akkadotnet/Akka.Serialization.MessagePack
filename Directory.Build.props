@@ -12,30 +12,18 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>logo.png</PackageIcon>
     <Description>
-            Akka.NET Roslyn Analyzers designed to help fix frequent, recurring design problems that may occur
-            in end-user code bases. Also includes helpful upgrade suggestions for migrating between minor and
-            major versions of Akka.NET.
-        </Description>
+      MsgPack serialization support for Akka.NET.      
+    </Description>
   </PropertyGroup>
+
   <PropertyGroup Label="Build">
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)\logo.png" Pack="true" Visible="false" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" Visible="false" PackagePath="\" />
   </ItemGroup>
-  <!-- ======================================== -->
-  <!-- Production-specific properties and items -->
-  <Choose>
-    <When Condition=" !$(MSBuildProjectName.Contains('.tests')) ">
-      <PropertyGroup>
-        <AnalysisLevel>latest-All</AnalysisLevel>
-        <EnableNETAnalyzers>true</EnableNETAnalyzers>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-      </PropertyGroup>
-    </When>
-  </Choose>
 </Project>
