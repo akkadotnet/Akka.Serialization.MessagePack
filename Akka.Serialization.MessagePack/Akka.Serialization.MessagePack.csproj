@@ -2,16 +2,9 @@
 
   <PropertyGroup>
     <AssemblyTitle>Akka.Serialization.MessagePack</AssemblyTitle>
-    <Copyright>Copyright © 2017</Copyright>
-    <Authors>Akka.NET Contrib</Authors>
     <Description>MessagePack serializer for Akka.NET</Description>
-    <VersionPrefix>1.1.0</VersionPrefix>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageTags>akka;actors;actor model;Akka;concurrency;messagepack;serializer;serialization</PackageTags>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks> 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageIconUrl>http://getakka.net/images/akkalogo.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/alexvaluyskiy/Akka.Serialization.MessagePack</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/alexvaluyskiy/Akka.Serialization.MessagePack/blob/master/LICENSE</PackageLicenseUrl>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
