@@ -3,7 +3,6 @@
 //     Copyright (C) 2017 Akka.NET Contrib <https://github.com/AkkaNetContrib/Akka.Serialization.MessagePack>
 // </copyright>
 //-----------------------------------------------------------------------
-#if SERIALIZATION
 using System;
 using MessagePack;
 using MessagePack.Formatters;
@@ -40,4 +39,3 @@ namespace Akka.Serialization.MessagePack.Resolvers
             typeof(Exception).IsAssignableFrom(typeof(T));
     }
 }
-#endif
