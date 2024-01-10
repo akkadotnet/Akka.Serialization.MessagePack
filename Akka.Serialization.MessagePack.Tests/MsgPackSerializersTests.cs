@@ -29,15 +29,13 @@ namespace Akka.Serialization.MessagePack.Tests
         {
         }
     }
-
-#if SERIALIZABLE
+    
     public class MsgPackExceptionsTests : ExceptionsTests
     {
         public MsgPackExceptionsTests() : base(typeof(MsgPackSerializer))
         {
         }
     }
-#endif
 
     public class MsgPackImmutableMessagesTests : ImmutableMessagesTests
     {

@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <Copyright>Copyright © 2013-2024 Akka.NET Project</Copyright>
+    <NoWarn>$(NoWarn);CS1591;NU1701;CA1707;</NoWarn>
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <!--<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+    <Authors>Akka.NET Team</Authors>
+    <PackageProjectUrl>https://github.com/akkadotnet/Akka.Serialization.MessagePack</PackageProjectUrl>
+    <PackageReleaseNotes>* [Resolved `AK2001`: `if` statements not cleanly managed by Code Fix](https://github.com/akkadotnet/akka.analyzers/pull/46)</PackageReleaseNotes>
+    <PackageTags>akka;actors;actor model;Akka;concurrency;messagepack;serializer;serialization</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>logo.png</PackageIcon>
+    <Description>
+      MsgPack serialization support for Akka.NET.      
+    </Description>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Build">
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\logo.png" Pack="true" Visible="false" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" Visible="false" PackagePath="\" />
+  </ItemGroup>
+</Project>

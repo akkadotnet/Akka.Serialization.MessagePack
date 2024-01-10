@@ -1,4 +1,3 @@
-#if SERIALIZATION
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -68,4 +67,3 @@ namespace Akka.Serialization.MessagePack.Resolvers
         }
     }
 }
-#endif
