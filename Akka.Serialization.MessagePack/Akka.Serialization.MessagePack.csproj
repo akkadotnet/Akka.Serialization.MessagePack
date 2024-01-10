@@ -13,8 +13,4 @@
     <PackageReference Include="MessagePack"/>
     <PackageReference Include="MessagePack.ImmutableCollection" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <DefineConstants>$(DefineConstants);SERIALIZATION</DefineConstants>
-  </PropertyGroup>
 </Project>
