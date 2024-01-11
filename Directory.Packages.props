@@ -11,7 +11,7 @@
 
     <!-- MsgPack Versions -->
     <ItemGroup>
-        <PackageVersion Include="CommunityToolkit.HighPerformance" Version="8.1.0" />
+        <PackageVersion Include="CommunityToolkit.HighPerformance" Version="8.2.2" />
         <PackageVersion Include="MessagePack" Version="2.4.59" />
         <PackageVersion Include="MessagePack.ImmutableCollection" Version="2.4.59" />
     </ItemGroup>
