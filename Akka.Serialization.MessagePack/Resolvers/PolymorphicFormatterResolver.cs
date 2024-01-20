@@ -40,7 +40,7 @@ namespace Akka.Serialization.MessagePack.Resolvers
             if ((_normalResolver is IDoNotUsePolymorphicFormatter) == false &&
                 typeof(T).IsClass)
             {
-                if ((typeof(T).IsAbstract || typeof(T).IsSealed) &&
+                if ((typeof(T).IsAbstract || !typeof(T).IsSealed) &&
                     typeof(ISurrogated).IsAssignableFrom(typeof(T))==  false)
                 {
                     formatterToUse =
