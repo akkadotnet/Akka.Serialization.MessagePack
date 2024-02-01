@@ -4,27 +4,69 @@ Akka.Serialization.MessagePack
 
 Akka.NET serialization with [MessagePack](https://github.com/neuecc/MessagePack-CSharp)
 
-## Supported platforms
-- .NET Core 2.0 (via .NET Standard 2.0)
-- .NET Framework 4.6.1 and higher (via .NET Standard 2.0)
+The `Akka.Serialization.MessagePack` plugin is designed to:
 
-## It supports
-- Primitive types (`int`, `string`, `long`, etc)
-- Build-in types (`DateTime`, `DateTimeOffset`, `TimeSpan`, `Guid`, `Uri`, `Enum`, etc)
-- Collections (`List<T>`, `HashSet<T>`, `Dictionary<TKey, TValue>`, etc)
-- Immutable Collections
-- Exceptions (only in netstandard2.0)
-- Akka.NET specific types (`ActorPath` and `ActorRef`)
-- Object types (polymorphic serialization)
-- Generic types
-- Version tolerance
+ - Be Low Ceremony for common cases.
+ - Allow flexiblity for advanced cases.
+ - Provide High Performance
+ - Allow for Optional LZ4 compaction.
 
-## It does not support
-- Internal and private classes
-- Classes with private or internal constructors
-- F# types (`Set`, `Map`, `List`, `FSharpAsync<T>`, discriminated unions)
-- Handling circular references
-- Preserve object references
+### Payload Versioning Notes
+
+#### Assembly Versions
+This plugin has a few different options to control payload serialization/deserialization:
+
+ - `allow-assembly-version-mismatch`
+   - If `False`, Assembly version mismatches between payload and availiable deserializer will throw.
+   - Default is `True`
+ - `omit-assembly-version`
+   - Controls whether Assembly version is included in payload.
+
+
+#### Schema Evolution
+
+One *can* do a form of 'Schema evolution' (if you squint at it from the right angle) with MessagePack payload definitions.
+
+Consider the following:
+
+```csharp
+[MessagePackObject(false)]
+public class WireType
+{
+   [Key(0)]
+   public int Foo {get;set;}
+   [Key(1)]
+   public string Bar {get;set;}
+   [Key(2)]
+   public byte[] Bin {get;set;}
+}
+```
+
+The above uses Messagepack attributes to define that every item is packed into an array.
+
+If one wanted to add a new field, they could do, for example,
+
+```csharp
+[MessagePackObject(false)]
+public class WireType
+{
+   [Key(0)]
+   public int Foo {get;set;}
+   [Key(1)]
+   public string Bar {get;set;}
+   [Key(2)]
+   public byte[] Bin {get;set;}
+   [Key(3)]
+   public byte[]? OtherBin {get;set;}
+}
+```
+
+The consumer will, of course, need to do it's own checks for whether `OtherBin` is null, however the serializer itself will be able to handle using/ignoring data appropriately.
+
+Two additional notes:
+
+1. Any empty slots will be filled with nil up to the max Key in the array. So, in the above example, if `OtherBin` had a Key index of 64, it would be serialized as a 64 slot array with 60 `nil` values between `Bin` and `OtherBin`.
+2. One can apply inheritance and DU-style behavior via attributes, see the MP docs for details.
 
 ## How to setup MessagePack as default serializer
 Bind MessagePack serializer using following HOCON configuration in your actor system settings:
