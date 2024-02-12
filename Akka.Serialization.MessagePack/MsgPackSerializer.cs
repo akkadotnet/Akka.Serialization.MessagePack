@@ -24,11 +24,12 @@ namespace Akka.Serialization.MessagePack
     {
         private readonly MsgPackSerializerSettings _settings;
         private readonly IFormatterResolver _resolver;
-        public readonly MessagePackSerializerOptions _serializerOptions;
+        public readonly MessagePackSerializerOptions SerializerOptions;
         private readonly IFormatterResolver _polymorphicResolver;
 
         public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)
         {
+
         }
 
         public MsgPackSerializer(ExtendedActorSystem system, Config config) 
@@ -156,20 +157,20 @@ namespace Akka.Serialization.MessagePack
             //We handle type filtering via our own options set.
             //By doing so, the existing Typeless API will hook in,
             //i.e. we don't have to write our own Typeless Filter.
-            _serializerOptions = new MessagePackTypeFilteringOptions(opts);
+            SerializerOptions = new MessagePackTypeFilteringOptions(opts);
 
         }
 
         public override byte[] ToBinary(object obj)
         {
             {
-                return MessagePackSerializer.Serialize(obj.GetType(), obj,_serializerOptions);
+                return MessagePackSerializer.Serialize(obj.GetType(), obj,SerializerOptions);
             }
         }
 
         public override object FromBinary(byte[] bytes, Type type)
         {
-            return MessagePackSerializer.Deserialize(type, bytes,_serializerOptions);
+            return MessagePackSerializer.Deserialize(type, bytes,SerializerOptions);
         }
 
         public override int Identifier => 151;

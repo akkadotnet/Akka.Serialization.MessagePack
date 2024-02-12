@@ -17,7 +17,11 @@ namespace Akka.Serialization.MessagePack.Resolvers
         public void Serialize(ref MessagePackWriter writer, T value,
             MessagePackSerializerOptions options)
         {
-            if (value.GetType() == typeof(T))
+            if (value == null)
+            {
+                writer.WriteNil();
+            }
+            else if (value.GetType() == typeof(T))
             {
                 _normalFormatter.Serialize(ref writer, value, options);
             }
@@ -51,7 +55,12 @@ namespace Akka.Serialization.MessagePack.Resolvers
                         return (T)TypelessFormatter.Instance.Deserialize(ref reader,
                             options);
                     break;
-                }       
+                }
+                case MessagePackCode.Nil:
+                {
+                    reader.ReadNil();
+                    return default!;
+                }
             }
             
             return _normalFormatter.Deserialize(ref reader, options);
