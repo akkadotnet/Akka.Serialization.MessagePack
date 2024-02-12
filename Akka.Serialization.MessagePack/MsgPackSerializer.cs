@@ -122,9 +122,7 @@ namespace Akka.Serialization.MessagePack
                         LoadFormatterResolverByType(t, system))
                     .Concat(new[]
                     {
-#if SERIALIZATION
                         SerializableResolver.Instance,
-#endif
                         ImmutableCollectionResolver.Instance,
                         settings.UseOldFormatterCompatibility
                             ? (IFormatterResolver)new
