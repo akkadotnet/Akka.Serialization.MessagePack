@@ -20,9 +20,6 @@ namespace Akka.Serialization.MessagePack.Resolvers
         private static readonly ConcurrentDictionary<string, Type> deserTypeCache =
             new ConcurrentDictionary<string, Type>();
 
-       // internal static readonly ReadOnlyMemory<byte> baseArraySpan = new byte[]
-       //     { (byte)(MessagePackCode.MinFixArray | (byte)3) };
-
         private static readonly Func<string, Type>
             typeLookupFactory = t => Type.GetType(t, true);
 
