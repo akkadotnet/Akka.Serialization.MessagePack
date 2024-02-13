@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using MessagePack.Formatters;
 
 namespace Akka.Serialization.MessagePack.Resolvers;
@@ -82,7 +83,15 @@ internal sealed class IntIndexedMessagePackFormatterDict
         }
         else
         {
-            return null!;
+            return ThrowOutOfRangeHelper(i, formatter);
         }
+    }
+
+    [MethodImplAttribute(MethodImplOptions.NoInlining)]
+    private static IMessagePackFormatter ThrowOutOfRangeHelper(int index,
+        IMessagePackFormatter formatter)
+    {
+        throw new IndexOutOfRangeException(
+            $"Value must be non-negative! Value was {index}, For Formatter {formatter?.GetType().FullName ?? "null"}");
     }
 }
