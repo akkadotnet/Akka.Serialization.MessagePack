@@ -5,7 +5,7 @@ namespace Akka.Serialization.MessagePack.Resolvers;
 /// </summary>
 internal static class TypeDictCtr
 {
-    private static int _typeCtr;
+    private static int _typeCtr = -1;
 
     internal static int doNotCallExternally()
     {

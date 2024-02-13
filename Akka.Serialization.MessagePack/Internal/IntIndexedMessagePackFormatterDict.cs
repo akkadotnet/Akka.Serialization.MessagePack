@@ -50,32 +50,39 @@ internal sealed class IntIndexedMessagePackFormatterDict
         //However this will not impact types that can already be deserialized,
         //and since we are always in a full fence here can ensure we don't
         //accidentally fail to share an instance.
-        
-        lock (_lockObj)
+        if (i >= 0)
         {
-            //We care about two things in the lock.
-            //First, if we need a resize, we do the resize,
-            //       and just copy the instance over because we have lock.
-            //Also, Guard for edge case where we get a type that misses bounds,
-            //      i.e. concurrent systems in same process.
-            //Otherwise, we check whether we are there
-            //           (if a competitor added it on resize, we see via fence)
-            //           and if not, add ours.
-            while (_formatters.Length <= i)
+            lock (_lockObj)
             {
-                //Resize. Copy everything over first,
-                //And then add our version before setting the new version.
-                var newF =
-                    new IMessagePackFormatter?[_formatters.Length * 2];
-                _formatters.CopyTo(newF.AsSpan());
-                _formatters = newF;    
-            }
-            if (_formatters[i] == null)
-            {
-                _formatters[i] = formatter;
-            }
-        }
+                //We care about two things in the lock.
+                //First, if we need a resize, we do the resize,
+                //       and just copy the instance over because we have lock.
+                //Also, Guard for edge case where we get a type that misses bounds,
+                //      i.e. concurrent systems in same process.
+                //Otherwise, we check whether we are there
+                //           (if a competitor added it on resize, we see via fence)
+                //           and if not, add ours.
+                while (_formatters.Length <= i)
+                {
+                    //Resize. Copy everything over first,
+                    //And then add our version before setting the new version.
+                    var newF =
+                        new IMessagePackFormatter?[_formatters.Length * 2];
+                    _formatters.CopyTo(newF.AsSpan());
+                    _formatters = newF;
+                }
 
-        return _formatters[i]!;
+                if (_formatters[i] == null)
+                {
+                    _formatters[i] = formatter;
+                }
+            }
+
+            return _formatters[i]!;
+        }
+        else
+        {
+            return null!;
+        }
     }
 }
