@@ -18,8 +18,6 @@ namespace Akka.Serialization.MessagePack.Resolvers
     public class SurrogatedFormatterResolver : IFormatterResolver, IDoNotUsePolymorphicFormatter
     {
 
-        private readonly IntIndexedMessagePackFormatterDict _formatterDict =
-            new IntIndexedMessagePackFormatterDict(16);
         private readonly ConcurrentDictionary<Type, IMessagePackFormatter>
             _formatterCache =
                 new ConcurrentDictionary<Type, IMessagePackFormatter>();
@@ -41,18 +39,14 @@ namespace Akka.Serialization.MessagePack.Resolvers
         {
             if (SurrogateResolvable<T>.IsSurrogated)
             {
-                if (_formatterDict.TryGet(SurrogatedTypeDict<T>.TypeVal,
-                        out var formatter))
+                if (_formatterCache.TryGetValue(typeof(T),out var formatter))
                 {
-                    //IMPORTANT!
-                    // This assumes that MakeValue<T> is doing a proper
-                    // sanity check on the formatter
-                    // produced by underlying resolver.
-                    return Unsafe.As<IMessagePackFormatter<T>>(formatter);
+                    return (IMessagePackFormatter<T>)formatter;
                 }
                 else
                 {
-                    return MakeValue<T>();
+                    return (IMessagePackFormatter<T>)_formatterCache.GetOrAdd(typeof(T),
+                        _formatterCreateFunc);
                 }
             }
             else
@@ -60,30 +54,5 @@ namespace Akka.Serialization.MessagePack.Resolvers
                 return null!;
             }
         }
-        
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private IMessagePackFormatter<T> MakeValue<T>()
-        {
-            // IMPORTANT!!!
-            // For type safety make sure to read comments!!!
-            // If you break below assumptions,
-            // GetFormatter may require refactor!
-            //
-            // The explicit-casting here,
-            // is to ensure we do a type check on returned value.
-            // This helps guarantee our Unsafe calls are safe in context.
-            // Since this is not at all the hot path,
-            // easy cost to justify for retaining type safety.
-            // 
-            // Minor Note:
-            // It's possible that we wastefully alloc here,
-            // However our 'wrapped' formatter should be caching,
-            // and the Polymorphic formatter itself is just a ref,
-            // so it's a cheap temporary cost to pay.
-            var f = (IMessagePackFormatter<T>)(object)_formatterCreateFunc(typeof(T));
-            return (IMessagePackFormatter<T>)_formatterDict.TryAdd(
-                TypeDict<T>.TypeVal, f);
-        }
-        
     }
 }
