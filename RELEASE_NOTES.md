@@ -1,3 +1,3 @@
-#### 1.5.15-beta1 January 29th 2024 ####
+#### 1.5.15-beta1 February 15 2024 ####
 
 * First Beta release for Akka.Serialization.MessagePack
