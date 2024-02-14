@@ -4,6 +4,7 @@
     <AssemblyTitle>Akka.Serialization.MessagePack</AssemblyTitle>
     <Description>MessagePack serializer for Akka.NET</Description>
     <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks> 
+    <PackageId>Akka.Serialization.MessagePack2</PackageId> <!-- needed until we get the Akka.Serialization.MessagePack name back -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
