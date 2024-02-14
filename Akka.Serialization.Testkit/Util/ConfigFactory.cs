@@ -8,22 +8,25 @@ using System;
 
 namespace Akka.Serialization.Testkit.Util
 {
-    public class ConfigFactory
+    public static class ConfigFactory
     {
-        public static string GetConfig(Type serializerType)
+        public const int SerializerIdOverride = 150;
+        
+        public static string GetConfig(Type serializerType, bool overrideSerializerId = false)
         {
-            return @"
-                akka.actor {
-                    serializers.msgpack = """ + serializerType.AssemblyQualifiedName + @"""
-                    serialization-bindings {
+            return $@"
+                akka.actor {{
+                    serializers.msgpack = ""{serializerType.AssemblyQualifiedName}""
+                    serialization-bindings {{
                       ""System.Object"" = msgpack
-                    }
-	                serialization-settings {
-		                msgpack {
+                    }}
+	                serialization-settings {{
+		                msgpack {{
 			                enable-lz4-compression = false
-		                }
-	                }
-                }";
+		                }}
+	                }}
+{(overrideSerializerId ? $"serialization-identifiers {{ \"{serializerType.AssemblyQualifiedName}\" : {SerializerIdOverride} }}" : "")}
+                }}";
         }
     }
 }

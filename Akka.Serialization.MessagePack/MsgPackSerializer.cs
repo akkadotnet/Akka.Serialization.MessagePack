@@ -12,6 +12,7 @@ using System.Threading;
 using Akka.Actor;
 using Akka.Configuration;
 using Akka.Serialization.MessagePack.Resolvers;
+using Akka.Util;
 using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.ImmutableCollection;
@@ -22,10 +23,14 @@ namespace Akka.Serialization.MessagePack
 {
     public sealed class MsgPackSerializer : Serializer
     {
+        public const int DefaultSerializerId = 151;
+        private const string SerializationIdentifiers = "akka.actor.serialization-identifiers";
+        
         private readonly MsgPackSerializerSettings _settings;
         private readonly IFormatterResolver _resolver;
         public readonly MessagePackSerializerOptions SerializerOptions;
         private readonly IFormatterResolver _polymorphicResolver;
+        private int _serializerId = -1;
 
         public MsgPackSerializer(ExtendedActorSystem system) : this(system, MsgPackSerializerSettings.Default)
         {
@@ -173,7 +178,21 @@ namespace Akka.Serialization.MessagePack
             return MessagePackSerializer.Deserialize(type, bytes,SerializerOptions);
         }
 
-        public override int Identifier => 151;
+        public override int Identifier
+        {
+            get
+            {
+                if (_serializerId != -1)
+                    return _serializerId;
+                
+                var config = system.Settings.Config.GetConfig(SerializationIdentifiers);
+                var identifiers = config.AsEnumerable()
+                    .ToDictionary(pair => Type.GetType(pair.Key, true), pair => pair.Value.GetInt());
+                _serializerId = identifiers.TryGetValue(GetType(), out var value) ? value : DefaultSerializerId;
+                
+                return _serializerId;
+            }
+        }
 
         public override bool IncludeManifest => true;
     }
