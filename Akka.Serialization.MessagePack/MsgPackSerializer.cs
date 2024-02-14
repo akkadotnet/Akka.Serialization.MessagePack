@@ -12,7 +12,6 @@ using System.Threading;
 using Akka.Actor;
 using Akka.Configuration;
 using Akka.Serialization.MessagePack.Resolvers;
-using Akka.Util;
 using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.ImmutableCollection;
