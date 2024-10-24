@@ -11,7 +11,6 @@ using Akka.Util.Reflection;
 using CommunityToolkit.HighPerformance.Buffers;
 using MessagePack;
 using MessagePack.Formatters;
-using Microsoft.NET.StringTools;
 
 namespace Akka.Serialization.MessagePack.Resolvers
 {
