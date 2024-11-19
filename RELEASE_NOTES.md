@@ -1,3 +1,9 @@
+#### 1.5.31-beta1 November 18th 2024 ####
+
+* [Upgrade Akka.Net to 1.5.31](https://github.com/akkadotnet/akka.net/releases/tag/1.5.31)
+* [Bump MessagePack to 2.5.192](https://github.com/akkadotnet/Akka.Serialization.MessagePack/pull/80)
+* [Bump CommunityToolkit.HighPerformance to 8.3.2](https://github.com/akkadotnet/Akka.Serialization.MessagePack/pull/68)
+
 #### 1.5.16-beta1 February 14 2024 ####
 
 Akka.Serialization.MessagePack Beta release for Akka.NET v1.5
