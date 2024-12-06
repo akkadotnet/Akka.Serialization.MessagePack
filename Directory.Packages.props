@@ -12,8 +12,8 @@
     <!-- MsgPack Versions -->
     <ItemGroup>
         <PackageVersion Include="CommunityToolkit.HighPerformance" Version="8.3.2" />
-        <PackageVersion Include="MessagePack" Version="2.5.192" />
-        <PackageVersion Include="MessagePack.ImmutableCollection" Version="2.4.59" />
+        <PackageVersion Include="MessagePack" Version="3.0.300" />
+        <PackageVersion Include="MessagePack.ImmutableCollection" Version="3.0.300" />
     </ItemGroup>
 
     <!-- Benchmark.NET -->
