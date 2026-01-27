@@ -4,9 +4,9 @@
     </PropertyGroup>
     <!-- Akka.NET Package Versions -->
     <ItemGroup>
-        <PackageVersion Include="Akka" Version="1.5.33" />
-        <PackageVersion Include="Akka.Serialization.Hyperion" Version="1.5.33" />
-        <PackageVersion Include="Akka.TestKit.Xunit2" Version="1.5.31" />
+        <PackageVersion Include="Akka" Version="1.5.59" />
+        <PackageVersion Include="Akka.Serialization.Hyperion" Version="1.5.59" />
+        <PackageVersion Include="Akka.TestKit.Xunit2" Version="1.5.59" />
     </ItemGroup>
 
     <!-- MsgPack Versions -->
