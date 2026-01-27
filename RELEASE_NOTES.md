@@ -1,3 +1,7 @@
+#### 1.5.59 January 26th 2025 ####
+
+* [Upgrade Akka.Net to 1.5.59](https://github.com/akkadotnet/akka.net/releases/tag/1.5.59)
+
 #### 1.5.31 November 26th 2024 ####
 
 This is the RTM release of Akka.Serialization.MessagePack
