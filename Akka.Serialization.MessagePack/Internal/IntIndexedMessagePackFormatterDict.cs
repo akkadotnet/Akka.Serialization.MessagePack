@@ -32,7 +32,7 @@ internal sealed class IntIndexedMessagePackFormatterDict
         //which does a full fence and then checks state.
         //Shouldn't happen much and only on startup...
         var f = _formatters;
-        if (i > f.Length)
+        if (i >= f.Length)
         {
             formatter = default;
             return false;
